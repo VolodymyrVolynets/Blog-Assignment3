@@ -9,3 +9,8 @@ html, body {
     max-width: 1200px;
     margin: auto;
 }
+
+.content.body-content {
+    margin: 3rem auto;
+    justify-content: center;
+}

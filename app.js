@@ -1,15 +1,20 @@
 require('dotenv').config()
 const express = require('express')
 const mysql = require('mysql')
-var path = require('path');
+const bodyParser = require('body-parser');
+
 const app = express()
 const port = process.env.PORT || 80
 
 app.use(express.static('public'))
 
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json())
+
 //Routers
-app.use(require('./views'))
-app.use(require('./auth'))
+app.use('/', require('./routes/views'))
+app.use('/auth', require('./routes/auth'))
+
 
 app.set('view engine', 'ejs')
 

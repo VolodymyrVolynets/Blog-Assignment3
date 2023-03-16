@@ -4,9 +4,10 @@ router.get("/",(req,res)=>{
     res.render('pages/home');
 })
 
-router.get("/error",(req,res)=>{
-    res.send('Error')
+router.get("/registration",(req,res)=>{
+    res.render('pages/registration')
 })
+
 
 // //Error
 // router.get('*', function(req, res, next) {
