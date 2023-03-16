@@ -1,4 +1,46 @@
 header {
     width: 100%;
-    background-color: red;
+}
+
+header div * {
+    margin: 0;
+}
+
+#header-navigation a {
+    color: white;
+    text-decoration: none;
+    transition: all 0.2s;
+    letter-spacing: 1px;
+}
+
+#header-navigation a:hover {
+    opacity: 0.4;
+}
+
+#header-navigation {
+    background-color: #FFA400;
+    height: 40px;
+}
+
+#header-navigation-links {
+    display: flex;
+    /* background-color: red; */
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+    margin: auto;
+}
+
+#header-navigation-pages {
+    display: flex;
+    justify-content: flex-start;
+    gap: 40px;
+    /* background-color: blue; */
+    max-width: 100%;
+    flex-grow: 1;
+}
+
+#header-navigation-social {
+    display: flex;
+    gap: 10px;
 }
