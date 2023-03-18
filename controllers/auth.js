@@ -1,13 +1,7 @@
-const mysql = require('mysql2/promise')
-const bcrypt = require('bcrypt')
+const jwt = require('./jwt')
+const db = require('./db')
+const hash = require('./hash')
 
-const connection = mysql.createPool({
-    host: process.env.DBHOST,
-    port: process.env.DBPORT,
-    user: process.env.DBUSER,
-    password: process.env.DBPASSWORD,
-    database: process.env.DBNAME
-})
 
 exports.register = async (req, res) => {
     const { username, password, confirmPassword } = req.body
@@ -27,7 +21,7 @@ exports.register = async (req, res) => {
 
     //if inputs valid check if user already exist
     try {
-        const allUsersWithUsername = await executeMYSQL("SELECT * from users WHERE username = ?", [username])
+        const allUsersWithUsername = await db.executeMYSQL("SELECT * from users WHERE username = ?", [username])
         if (allUsersWithUsername.length >= 1) {
             return res.render('pages/registration', {
                 message: 'Username already taken', 
@@ -35,8 +29,12 @@ exports.register = async (req, res) => {
             })
         } else {
             //if user not exist create new user and redirect to a home page
-            const hashedPass = await hash(password)
-            executeMYSQL("INSERT INTO users (username, password) VALUES (?, ?)", [username, hashedPass])
+            const hashedPass = await hash.hash(password)
+            db.executeMYSQL("INSERT INTO users (username, password) VALUES (?, ?)", [username, hashedPass])
+            
+            //generate JWT Token
+            const token = jwt.generateAccessToken({username: username})
+            res.cookie('token', token, { maxAge: 3600000, httpOnly: true });
             return res.redirect('/')
         }
     } catch (err) {
@@ -55,14 +53,4 @@ function isValidInput(input) {
     const regex = new RegExp("^[a-zA-Z0-9]{5,16}$");
     const isValid = regex.test(input);
     return isValid;
-}
-
-async function executeMYSQL(query, params) {
-    const [result] = await connection.execute(query, params)
-    return result
-}
-
-async function hash(toHash) {
-    const hashed = await bcrypt.hash(toHash, 10)
-    return hashed
 }
