@@ -29,8 +29,7 @@ exports.register = async (req, res) => {
 
     //if inputs valid check if user already exist
     try {
-        const allUsersWithUsername = await db.executeMYSQL("SELECT * from users WHERE BINARY username = ?", [username])
-        if (allUsersWithUsername.length >= 1) {
+        if (await db.isUserExist(username)) {
             const errorMessage = userData.genMessageDataJSON('Username already taken', true)
             return res.render('pages/registration', {
                 user: req.user,
@@ -74,8 +73,7 @@ exports.login = async (req, res) => {
 
     //if inputs valid check if user already exist
     try {
-        const allUsersWithUsername = await db.executeMYSQL("SELECT * from users WHERE BINARY username = ?", [username])
-        if (allUsersWithUsername.length < 1) {
+        if (!await db.isUserExist(username)) {
             const errorMessage = userData.genMessageDataJSON('User do not exist', true)
             return res.render('pages/login', {
                 user: req.user,
@@ -85,8 +83,8 @@ exports.login = async (req, res) => {
         }
 
         //if user exist try to login
-        console.log(allUsersWithUsername[0]['password'])
-        const isCorrectPassword = await hash.check(password, allUsersWithUsername[0]['password'])
+        const user = await db.getUser(username)
+        const isCorrectPassword = await hash.check(password, user.password)
 
         //if password incorect try again
         if (!isCorrectPassword) {
@@ -99,7 +97,7 @@ exports.login = async (req, res) => {
         }
         
         //generate JWT Token
-        const token = jwt.generateAccessToken({username: username})
+        const token = jwt.generateAccessToken({username: username, isAdmin: user.isAdmin})
         res.cookie('token', token, { maxAge: 3600000, httpOnly: true });
         return res.redirect('/')
         
@@ -114,30 +112,6 @@ exports.login = async (req, res) => {
     }
 }
 
-exports.email = async (req, res) => {
-    const { email } = req.body
-
-    const nodemailer = require("nodemailer");
-    const transporter = nodemailer.createTransport({
-      host: "smtp.office365.com",
-      port: 587,
-      auth: {
-        user: process.env.EMAIL,
-        pass: process.env.EMAIL_PASSWORD,
-      },
-    })
-      
-    transporter.sendMail({
-      from: '"Volodymyr Volynets" <assignment3volodymyrvolynets@outlook.com>', // sender address
-      to: email, // list of receivers
-      subject: "Assignment 3 Volodymyr Volynets", // Subject line
-      text: "You Successfuly subscribed", // plain text body
-      html: "<b>You Successfuly subscribed</b>", // html body
-    }).then(info => {
-      console.log({info})
-    }).catch(console.error)
-  
-}
 exports.logout = (req, res) => {
     res.clearCookie("token")
     res.redirect('/')

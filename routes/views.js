@@ -2,8 +2,9 @@ const express = require('express')
 const router = express.Router()
 const userData = require('../controllers/userData')
 const contentManager = require('../controllers/contentManager')
+const validation = require('../controllers/userData')
 
-router.get("/",(req, res) => {
+router.get("/", async (req, res) => {
     const message = userData.genMessageDataJSON()
     const input = userData.genInputDataJSON()
 
@@ -12,7 +13,7 @@ router.get("/",(req, res) => {
         message: message,
         input: input,
         carousel: contentManager.getLatestCarosel(),
-        posts:  contentManager.getPosts()
+        posts:  await contentManager.getPosts()
         })
 
 })
@@ -35,6 +36,31 @@ router.get('/login', (req, res) => {
         user: req.user,
         input: input
         })
+})
+
+router.get('/post', async (req, res) => {
+    const id = req.query.id
+
+    if (validation.isNumeric(id)) {
+
+        const post = await contentManager.getPostById(id)
+        
+        res.render('pages/post', {
+            user: req.user,
+            post: post
+        })
+    } else {
+        res.redirect('/')
+    }
+})
+
+router.get("/blog", async (req, res) => {
+
+    res.render('pages/blog', {
+        user: req.user,
+        posts:  await contentManager.getPosts()
+        })
+
 })
 
 

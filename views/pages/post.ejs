@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/stylesheet/header.css">
+  <link rel="stylesheet" href="/stylesheet/body.css">
+  <%- include('../partials/bootstrapStyle.ejs')%>
+    <title>Document</title>
+</head>
+
+<body>
+  <header>
+    <%- include('../partials/header')%>
+  </header>
+  <div class="content body-content">
+
+
+          <div class="flex flex-wrap vertical" style="width: 100%">
+            <% if(typeof(post) !="undefined" ) { %>
+                <h1><%- post.title%></h1>
+                <h5>Published by <%- post.author%> on <%-post.date%></h5>
+                <img src="<%- post.imgURL%>" alt="" style="width: 100%">
+                <p><%-post.description%></p>
+            <% } %>
+          </div>
+
+  </div>
+
+  <footer>
+    <%- include('../partials/footer')%>
+  </footer>
+
+  <%- include('../partials/bootstrapJS.ejs')%>
+</body>
+
+</html>

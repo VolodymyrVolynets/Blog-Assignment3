@@ -11,8 +11,6 @@ router.post("/registration", authController.register)
 
 router.post("/login", authController.login)
 
-router.post('/email', authController.email)
-
 router.get("/logout", authController.logout)
 
 

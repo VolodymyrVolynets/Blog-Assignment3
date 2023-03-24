@@ -7,7 +7,7 @@ exports.checkUser = async (req, res, next) => {
     const payload = jwt.checkToken(token)
 
     try {
-        req.user = userDetails.genUserDataJSON(true, false, payload['username'])
+        req.user = userDetails.genUserDataJSON(true, payload['isAdmin'], payload['username'])
     } catch (err) {
         req.user = userDetails.genUserDataJSON(false, false, '')
     }

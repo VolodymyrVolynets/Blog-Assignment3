@@ -57,7 +57,7 @@
                   <div class="card-body">
                     <h5 class="card-title"><%-posts[i].title%>e</h5>
                     <p class="card-text"><%-posts[i].description%></p>
-                    <a href="#" class="btn btn-primary" style="background-color:#FFA400;">Explore</a>
+                    <a href="./post?id=<%-posts[i].id%>" class="btn btn-primary" style="background-color:#FFA400;">Explore</a>
                   </div>
                 </div>
                 <% } %>
@@ -78,7 +78,7 @@
 
                   <div class="input-group mb-3 mt-4">
 
-                    <form action="/auth/email" method="POST">
+                    <form action="./mail/subscribeForUpdates" method="POST">
                       <input type="text" class="form-control" placeholder="Enter email" aria-label="Recipient's username" aria-describedby="button-addon2" id="email" name="email">
                       <button class="btn btn-success border-rad" type="submit" id="button-addon2"
                         style="background-color:#FFA400;">Subscribe</button>

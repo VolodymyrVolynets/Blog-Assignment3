@@ -18,6 +18,7 @@ app.use(auth.checkUser);
 //Routers
 app.use('/', require('./routes/views'))
 app.use('/auth', require('./routes/auth'))
+app.use('/mail', require('./routes/mail'))
 
 
 app.set('view engine', 'ejs')
