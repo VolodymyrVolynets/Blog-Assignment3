@@ -3,7 +3,7 @@ const express = require('express')
 const mysql = require('mysql2')
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
-const db = require('./controllers/db')
+const auth = require('./middleware/auth')
 
 const app = express()
 const port = process.env.PORT || 80
@@ -13,6 +13,7 @@ app.use(express.static('public'))
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 app.use(cookieParser());
+app.use(auth.checkUser);
 
 //Routers
 app.use('/', require('./routes/views'))

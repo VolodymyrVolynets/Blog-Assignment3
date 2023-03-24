@@ -14,3 +14,36 @@ html, body {
     margin: 3rem auto;
     justify-content: center;
 }
+
+.flex {
+    display: flex;
+    gap: 20px;
+}
+
+.vertical {
+    flex-direction: column;
+}
+
+.flex .wrap {
+    flex-wrap: wrap;
+}
+
+.body-content > * {
+    padding-bottom: 1.6rem;
+    /* padding: 0; */
+    margin: 0;
+}
+
+.body-content .flex:first-child {
+    width: 80%;
+}
+
+@media screen and (max-width: 700px) {
+    .mobile-disabled {
+        display: none !important;
+    }
+    .body-content .flex:first-child {
+        width: 100%;
+    }
+    
+}

@@ -1,0 +1,3 @@
+<% if (typeof message != "undefined") { %>
+    <h4 class="alert alert-<%- message.isError ? 'danger' : 'success'%> mt-4"><%- message.text %></h4>
+<% } %>

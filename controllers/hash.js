@@ -5,4 +5,8 @@ async function hash(toHash) {
     return hashed
 }
 
-module.exports = { hash }
+async function check(password, hashed) {
+    return await bcrypt.compare(password, hashed)
+}
+
+module.exports = { hash, check }

@@ -1,32 +1,41 @@
-const express=require('express')
-const router=express.Router()
-router.get("/",(req,res)=>{
-    res.render('pages/home');
+const express = require('express')
+const router = express.Router()
+const userData = require('../controllers/userData')
+const contentManager = require('../controllers/contentManager')
+
+router.get("/",(req, res) => {
+    const message = userData.genMessageDataJSON()
+    const input = userData.genInputDataJSON()
+
+    res.render('pages/home', {
+        user: req.user,
+        message: message,
+        input: input,
+        carousel: contentManager.getLatestCarosel(),
+        posts:  contentManager.getPosts()
+        })
+
 })
 
-router.get("/registration",(req,res)=>{
-    res.render('pages/registration')
+router.get('/registration', (req, res) => {
+    const message = userData.genMessageDataJSON('Password and username should contains digits or lettes and 5-16 symbols length', false)
+    const input = userData.genInputDataJSON()
+    
+    res.render('pages/registration', {
+        user: req.user,
+        message: message,
+        input: input
+        })
 })
 
+router.get('/login', (req, res) => {
+    const input = userData.genInputDataJSON()
+    
+    res.render('pages/login', {
+        user: req.user,
+        input: input
+        })
+})
 
-// //Error
-// router.get('*', function(req, res, next) {
-//     res.status(404);
-  
-//     // respond with html page
-//     if (req.accepts('html')) {
-//       res.send('Error');
-//       return;
-//     }
-  
-//     // respond with json
-//     if (req.accepts('json')) {
-//       res.json({ error: 'Not found' });
-//       return;
-//     }
-  
-//     // default to plain-text. send()
-//     res.type('txt').send('Not found');
-//   });
 
 module.exports = router;
