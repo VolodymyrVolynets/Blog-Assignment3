@@ -19,6 +19,14 @@ app.use(auth.checkUser);
 app.use('/', require('./routes/views'))
 app.use('/auth', require('./routes/auth'))
 app.use('/mail', require('./routes/mail'))
+app.use('/post', require('./routes/post'))
+app.use('/admin', (req, res, next) => { 
+  if (req.user.isAdmin) {
+    next()
+  } else {
+    res.redirect('back')
+  }
+}, require('./routes/admin'))
 
 
 app.set('view engine', 'ejs')

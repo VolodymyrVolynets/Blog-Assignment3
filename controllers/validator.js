@@ -36,7 +36,10 @@ function isNumeric(value) {
     return /^-?\d+$/.test(value);
 }
 
+function isValidText(text) {
+    return /^[A-Za-z0-9\s.,;]*$/.test(text)
+}
 
 
 
-module.exports = { genUserDataJSON, genMessageDataJSON, genInputDataJSON, isValidInput, isValidEmail, isNumeric }
+module.exports = { genUserDataJSON, genMessageDataJSON, genInputDataJSON, isValidInput, isValidEmail, isNumeric, isValidText }

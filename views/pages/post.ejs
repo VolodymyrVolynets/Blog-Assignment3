@@ -18,14 +18,95 @@
   <div class="content body-content">
 
 
-          <div class="flex flex-wrap vertical" style="width: 100%">
-            <% if(typeof(post) !="undefined" ) { %>
-                <h1><%- post.title%></h1>
-                <h5>Published by <%- post.author%> on <%-post.date%></h5>
-                <img src="<%- post.imgURL%>" alt="" style="width: 100%">
-                <p><%-post.description%></p>
+    <div class="flex flex-wrap vertical" style="width: 100%">
+      <% if(typeof(post) !="undefined" ) { %>
+        <h1><%- post.title%></h1>
+        <h5>Published by <%- post.author%> on <%-post.date%></h5>
+        <img src="<%- post.imgURL%>" alt="" style="width: 100%">
+        <p><%-post.description%></p>
+        <% } %>
+    </div>
+
+    <% if (typeof(comments) != 'undefined' && comments.length >= 1) { %>
+
+      <% for ( var i = 0; i < comments.length; i++) { %>
+        <% if(i == 0) { %>
+          <div class="col-md-12 col-lg-10" style="width: 100%;">
+            <div class="card text-dark">
+              <div class="card-body p-4">
+                <h4 class="mb-0">Recent comments</h4>
+                <p class="fw-light mb-4 pb-2">Latest Comments section by users</p>
+      
+                <div class="d-flex flex-start">
+                  <img class="rounded-circle shadow-1-strong me-3" src="./img/user.png" alt="avatar" width="60" height="60" />
+                  <div>
+                    <h6 class="fw-bold mb-1"><%- comments[i].username%></h6>
+                    <div class="d-flex align-items-center mb-3">
+                      <p class="mb-0">
+                        <%- comments[i].date%>
+      
+                      </p>
+                      <a href="#!" class="link-muted"><i class="fas fa-pencil-alt ms-2"></i></a>
+                      <a href="#!" class="link-muted"><i class="fas fa-redo-alt ms-2"></i></a>
+                      <a href="#!" class="link-muted"><i class="fas fa-heart ms-2"></i></a>
+                    </div>
+                    <p class="mb-0">
+                      <%- comments[i].comment%>
+                    </p>
+                  </div>
+                </div>
+              </div>
+          <% } else { %>
+
+            <hr class="my-0" />
+  
+            <div class="card-body p-4">
+              <div class="d-flex flex-start">
+                <img class="rounded-circle shadow-1-strong me-3"
+                  src="./img/user.png" alt="avatar" width="60" height="60" />
+                <div>
+                  <h6 class="fw-bold mb-1"><%- comments[i].username%></h6>
+                  <div class="d-flex align-items-center mb-3">
+                    <p class="mb-0">
+                      <%- comments[i].date%>
+                    </p>
+                    <a href="#!" class="link-muted"><i class="fas fa-pencil-alt ms-2"></i></a>
+                    <a href="#!" class="text-success"><i class="fas fa-redo-alt ms-2"></i></a>
+                    <a href="#!" class="link-danger"><i class="fas fa-heart ms-2"></i></a>
+                  </div>
+                  <p class="mb-0">
+                    <%- comments[i].comment%>
+                  </p>
+                </div>
+              </div>
+            </div>
+            
             <% } %>
+            
+
+        <% } %>
           </div>
+          </div>
+    <% } %>
+
+
+    <% if(user.isLoggedIn) { %>
+
+    <div class="bg-light p-2">
+      <form action="./post/" method="POST">
+        <input type="hidden" name="id" value="<%-post.id%>">
+      <div class="d-flex flex-row align-items-start"><img class="rounded-circle" src="./img/user.png" width="40">
+        <textarea class="form-control ml-1 shadow-none textarea" name="text"></textarea>
+      </div>
+      <div class="mt-2 text-right">
+        <button class="btn btn-primary btn-sm shadow-none" type="submit" style="background-color: #FFA400;">Post comment</button>
+      </div>
+    </form>
+  </div>
+  <% } %>
+
+
+
 
   </div>
 

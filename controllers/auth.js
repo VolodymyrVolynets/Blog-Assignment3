@@ -1,118 +1,113 @@
-const jwt = require('./jwt')
-const db = require('./db')
-const hash = require('./hash')
-const userData = require('./userData')
+const jwt = require("./jwt");
+const usersDB = require("./db/dbUsers");
+const hash = require("./hash");
+const validator = require("./validator");
 
-
-// TODO - fix username
 
 exports.register = async (req, res) => {
-    const { username, password, confirmPassword } = req.body
+  const { username, password, confirmPassword } = req.body;
 
-    //Check for valid input
-    const inputData = userData.genInputDataJSON(username)
-    if (password != confirmPassword) {
-        const errorMessage = userData.genMessageDataJSON('Passwords do not match', true)
-        return res.render('pages/registration', {
-            user: req.user,
-            message: errorMessage,
-            input: inputData
-        })
-    } else if (!userData.isValidInput(password) || !userData.isValidInput(username)) {
-        const errorMessage = userData.genMessageDataJSON('Password and username should contains digits or lettes and 5-16 symbols length', true)
-        return res.render('pages/registration', {
-            user: req.user,
-            message: errorMessage,
-            input: inputData
-        })
-    }
+  //Check for valid input
+  const inputData = validator.genInputDataJSON(username);
+  if (password != confirmPassword) {
+    return res.render("pages/registration", {
+      user: req.user,
+      message: validator.genMessageDataJSON("Passwords do not match"),
+      input: inputData,
+    });
+  } else if (
+    !validator.isValidInput(password) ||
+    !validator.isValidInput(username)
+  ) {
+    return res.render("pages/registration", {
+      user: req.user,
+      message: validator.genMessageDataJSON("Password and username should contains digits or lettes and 5-16 symbols length"),
+      input: inputData,
+    });
+  }
 
-    //if inputs valid check if user already exist
-    try {
-        if (await db.isUserExist(username)) {
-            const errorMessage = userData.genMessageDataJSON('Username already taken', true)
-            return res.render('pages/registration', {
-                user: req.user,
-                message: errorMessage,
-                input: inputData
-            })
-        } else {
-            //if user not exist create new user and redirect to a home page
-            const hashedPass = await hash.hash(password)
-            db.executeMYSQL("INSERT INTO users (username, password) VALUES (?, ?)", [username, hashedPass])
-            
-            //generate JWT Token
-            const token = jwt.generateAccessToken({username: username})
-            res.cookie('token', token, { maxAge: 3600000, httpOnly: true });
-            return res.redirect('/')
-        }
-    } catch (err) {
-        //if error with db
-        const errorMessage = userData.genMessageDataJSON('Unknown Error', true)
-        return res.render('pages/registration', {
-            user: req.user,
-            message: errorMessage,
-            input: inputData
-        })
+  //if inputs valid check if user already exist
+  try {
+    if (await usersDB.isUserExist(username)) {
+      return res.render("pages/registration", {
+        user: req.user,
+        message: validator.genMessageDataJSON("Username already taken"),
+        input: inputData,
+      });
+    } else {
+      //if user not exist create new user and redirect to a home page
+      const hashedPass = await hash.hash(password);
+      await usersDB.newUser(username, hashedPass)
+
+      //generate JWT Token
+      const token = jwt.generateAccessToken({ username: username });
+      res.cookie("token", token, { maxAge: 3600000, httpOnly: true });
+      return res.redirect("/");
     }
-}
+  } catch (err) {
+    //if error with db
+    return res.render("pages/registration", {
+      user: req.user,
+      message: validator.genMessageDataJSON("Unknown Error"),
+      input: inputData,
+    });
+  }
+};
 
 exports.login = async (req, res) => {
-    const { username, password } = req.body
-    const inputData = userData.genInputDataJSON(username)
+  const { username, password } = req.body;
+  const inputData = validator.genInputDataJSON(username);
 
-    //Check for valid input
-    if (!userData.isValidInput(password) || !userData.isValidInput(username)) {
-        const errorMessage = userData.genMessageDataJSON('Invalid password or username', true)
-        return res.render('pages/login', {
-            user: req.user,
-            message: errorMessage,
-            input: inputData
-        })
+  //Check for valid input
+  if (!validator.isValidInput(password) || !validator.isValidInput(username)) {
+    return res.render("pages/login", {
+      user: req.user,
+      message: validator.genMessageDataJSON("Invalid password or username"),
+      input: inputData,
+    });
+  }
+
+  //if inputs valid check if user already exist
+  try {
+    if (!(await usersDB.isUserExist(username))) {
+      return res.render("pages/login", {
+        user: req.user,
+        message: validator.genMessageDataJSON("User do not exist"),
+        input: inputData,
+      });
     }
 
-    //if inputs valid check if user already exist
-    try {
-        if (!await db.isUserExist(username)) {
-            const errorMessage = userData.genMessageDataJSON('User do not exist', true)
-            return res.render('pages/login', {
-                user: req.user,
-                message: errorMessage,
-                input: inputData
-            })
-        }
+    //if user exist try to login
+    const user = await usersDB.getUser(username);
+    const isCorrectPassword = await hash.check(password, user.password);
 
-        //if user exist try to login
-        const user = await db.getUser(username)
-        const isCorrectPassword = await hash.check(password, user.password)
-
-        //if password incorect try again
-        if (!isCorrectPassword) {
-            const errorMessage = userData.genMessageDataJSON('Wrong password', true)
-            return res.render('pages/login', {
-                user: req.user,
-                message: errorMessage,
-                input: inputData
-            })
-        }
-        
-        //generate JWT Token
-        const token = jwt.generateAccessToken({username: username, isAdmin: user.isAdmin})
-        res.cookie('token', token, { maxAge: 3600000, httpOnly: true });
-        return res.redirect('/')
-        
-    } catch (err) {
-        //if error with db
-        const errorMessage = userData.genMessageDataJSON('Unknown Error', true)
-        return res.render('pages/login', {
-            user: req.user,
-            message: errorMessage,
-            input: inputData
-        })
+    //if password incorect try again
+    if (!isCorrectPassword) {
+      return res.render("pages/login", {
+        user: req.user,
+        message: validator.genMessageDataJSON("Wrong password", true),
+        input: inputData,
+      });
     }
-}
+
+    //generate JWT Token
+    const token = jwt.generateAccessToken({
+      username: username,
+      isAdmin: user.isAdmin,
+    });
+    res.cookie("token", token, { maxAge: 3600000, httpOnly: true });
+    return res.redirect("/");
+  } catch (err) {
+    //if error with db
+    return res.render("pages/login", {
+      user: req.user,
+      message: validator.genMessageDataJSON("Unknown Error", true),
+      input: inputData,
+    });
+  }
+};
 
 exports.logout = (req, res) => {
-    res.clearCookie("token")
-    res.redirect('/')
-}
+  res.clearCookie("token");
+  res.redirect("back");
+};

@@ -1,5 +1,5 @@
 const jwt = require('../controllers/jwt')
-const userDetails = require('../controllers/userData')
+const validator = require('../controllers/validator')
 
 
 exports.checkUser = async (req, res, next) => {
@@ -7,9 +7,9 @@ exports.checkUser = async (req, res, next) => {
     const payload = jwt.checkToken(token)
 
     try {
-        req.user = userDetails.genUserDataJSON(true, payload['isAdmin'], payload['username'])
+        req.user = validator.genUserDataJSON(true, payload['isAdmin'], payload['username'])
     } catch (err) {
-        req.user = userDetails.genUserDataJSON(false, false, '')
+        req.user = validator.genUserDataJSON(false, false, '')
     }
 
     next()

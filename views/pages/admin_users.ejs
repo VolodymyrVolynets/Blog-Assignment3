@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/stylesheet/header.css">
+    <link rel="stylesheet" href="/stylesheet/body.css">
+    <%- include('../partials/bootstrapStyle.ejs')%>
+        <title>Document</title>
+</head>
+
+<body>
+    <header>
+        <%- include('../partials/header')%>
+    </header>
+    <div class="content body-content">
+
+        <a class="btn btn-primary" href="./" role="button">Back</a>
+
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">id</th>
+                    <th scope="col">username</th>
+                    <th scope="col">isAdmin</th>
+                </tr>
+            </thead>
+            <tbody>
+
+
+                <% for(var i=0; i < users.length; i++) { %>
+                    <tr>
+                        <th scope="row"><%- users[i].id%></th>
+                        <td><%- users[i].username%></td>
+                        <td><a href="./toogleadmin?id=<%- users[i].id%>"><%- users[i].isAdmin%></a></td>
+                    </tr>
+                    <% } %>
+            </tbody>
+        </table>
+    </div>
+
+    <footer>
+        <%- include('../partials/footer')%>
+    </footer>
+
+    <%- include('../partials/bootstrapJS.ejs')%>
+</body>
+
+</html>
