@@ -1,4 +1,3 @@
-const { use } = require('../../routes/auth')
 const db = require('./db')
 
 async function isUserExist(username) {
@@ -24,6 +23,11 @@ async function newUser(username, hashedPass) {
       ])
 }
 
+async function removeUserById(id) {
+    await db.executeMYSQL("DELETE FROM users WHERE id = ?;", [id])
+  }
+  
+
 async function makeAdminUserById(id) {
     await db.executeMYSQL("UPDATE users SET isAdmin = 1 WHERE id = ?;", [id])
 }
@@ -44,5 +48,6 @@ module.exports = {
     getAllUsers,
     makeAdminUserById,
     removeAdminUserById,
-    isAdminById
+    isAdminById,
+    removeUserById
 }

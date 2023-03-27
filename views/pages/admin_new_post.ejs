@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/stylesheet/header.css">
+    <link rel="stylesheet" href="/stylesheet/body.css">
+    <%- include('../partials/bootstrapStyle.ejs')%>
+        <title>Document</title>
+</head>
+
+<body>
+    <header>
+        <%- include('../partials/header')%>
+    </header>
+    <div class="content body-content">
+
+        <a class="btn btn-primary" href="./" role="button">Back</a>
+
+
+        <form action="./newpost" method="POST">
+            <div class="mb-3">
+                <label for="title" class="form-label">Title</label>
+                <input type="text" class="form-control" id="title" name="title">
+            </div>
+            <div class="mb-3">
+                <label for="date" class="form-label">Date</label>
+                <input type="text" class="form-control" id="date" name="date">
+            </div>
+            <div class="mb-3">
+                <label for="author" class="form-label">Author</label>
+                <input type="text" class="form-control" id="author" name="author">
+            </div>
+            <div class="mb-3">
+                <label for="imgURL" class="form-label">imgURL</label>
+                <input type="text" class="form-control" id="imgURL" name="imgURL">
+            </div>
+            <div class="mb-3">
+                <label for="description" class="form-label">Description</label>
+                <input type="text" class="form-control" id="description" name="description" >
+            </div>
+            <button type="submit" class="btn btn-primary">Add</button>
+        </form>
+
+    </div>
+
+    <footer>
+        <%- include('../partials/footer')%>
+    </footer>
+
+    <%- include('../partials/bootstrapJS.ejs')%>
+</body>
+
+</html>

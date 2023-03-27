@@ -12,7 +12,7 @@ router.get("/", async (req, res) => {
     message: message,
     input: input,
     carousel: contentManager.getLatestCarosel(),
-    posts: await contentManager.getPosts(),
+    posts: await contentManager.getLast3Posts(),
   });
 });
 

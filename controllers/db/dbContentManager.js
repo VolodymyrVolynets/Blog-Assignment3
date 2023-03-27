@@ -33,7 +33,7 @@ async function getPosts() {
 
 async function getLast3Posts() {
   const result = await db.executeMYSQL(
-    "SELECT * FROM posts ORDER BY id DESC LIMIT 10;"
+    "SELECT * FROM posts ORDER BY id DESC LIMIT 3;"
   );
   return result;
 }
@@ -51,11 +51,7 @@ async function getCommentsForPost(postId) {
 }
 
 async function newComment(postId, username, comment) {
-  const userId = (await db.executeMYSQL('SELECT id FROM users WHERE users.username = ?;', [username]))[0]['id']
-  console.log(postId)
-  console.log(userId)
-  console.log(comment)
-  console.log(moment().format('YYYY-MM-DD'))
+  const userId = (await db.executeMYSQL('SELECT id FROM users WHERE users.username = ?;', [username]))[0]['id'] 
   return await db.executeMYSQL("INSERT INTO comments (date, comment, post_id, user_id) VALUES (?, ?, ?, ?);", [moment().format('YYYY-MM-DD'), comment, postId, userId])
 }
 
@@ -67,6 +63,26 @@ async function removeCommentById(id) {
   await db.executeMYSQL("DELETE FROM comments WHERE id = ?;", [id])
 }
 
+async function getAllPosts() {
+  return await db.executeMYSQL("SELECT * FROM posts;")
+}
+
+async function removePostById(id) {
+  await db.executeMYSQL("DELETE FROM posts WHERE id = ?;", [id])
+}
+
+async function updatePost(date, title, author, description, imgURL, id) {
+  await db.executeMYSQL("UPDATE posts SET date = ?, title = ?, author = ?, description = ?, imgURL = ? WHERE id = ?;", [date, title, author, description, imgURL, id])
+}
+
+async function addPost(date, title, author, description, imgURL) {
+  console.log(date)
+  console.log(title)
+  console.log(author)
+  console.log(description)
+  console.log(imgURL)
+  await db.executeMYSQL("INSERT INTO posts (date, title, author, description, imgURL) VALUES (?, ?, ?, ?, ?);", [date, title, author, description, imgURL])
+}
 
 module.exports = {
   getLatestCarosel,
@@ -76,5 +92,9 @@ module.exports = {
   getCommentsForPost,
   newComment,
   getAllComments,
-  removeCommentById
+  removeCommentById,
+  removePostById,
+  getAllPosts,
+  updatePost,
+  addPost
 };
