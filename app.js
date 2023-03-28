@@ -1,9 +1,8 @@
 require('dotenv').config()
 const express = require('express')
-const mysql = require('mysql2')
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
-const auth = require('./middleware/auth')
+const middleware = require('./middleware/auth')
 
 const app = express()
 const port = process.env.PORT || 80
@@ -13,20 +12,14 @@ app.use(express.static('public'))
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 app.use(cookieParser());
-app.use(auth.checkUser);
+app.use(middleware.checkIfLoggedIn);
 
 //Routers
 app.use('/', require('./routes/views'))
 app.use('/auth', require('./routes/auth'))
 app.use('/mail', require('./routes/mail'))
 app.use('/post', require('./routes/post'))
-app.use('/admin', (req, res, next) => { 
-  if (req.user.isAdmin) {
-    next()
-  } else {
-    res.redirect('back')
-  }
-}, require('./routes/admin'))
+app.use('/admin', middleware.checkIfAdmin, require('./routes/admin/admin'))
 
 
 app.set('view engine', 'ejs')

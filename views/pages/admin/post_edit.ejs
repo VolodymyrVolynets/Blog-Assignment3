@@ -7,50 +7,51 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/stylesheet/header.css">
     <link rel="stylesheet" href="/stylesheet/body.css">
-    <%- include('../partials/bootstrapStyle.ejs')%>
+    <%- include('../../partials/bootstrapStyle.ejs')%>
         <title>Document</title>
 </head>
 
 <body>
     <header>
-        <%- include('../partials/header')%>
+        <%- include('../../partials/header')%>
     </header>
     <div class="content body-content">
 
-        <a class="btn btn-primary" href="./" role="button">Back</a>
+        <a class="btn btn-primary" href="/admin/posts" role="button">Back</a>
 
 
-        <form action="./newpost" method="POST">
+        <form action="/admin/posts/edit" method="POST">
             <div class="mb-3">
                 <label for="title" class="form-label">Title</label>
-                <input type="text" class="form-control" id="title" name="title">
+                <input type="text" class="form-control" id="title" name="title" value="<%-post.title%>">
             </div>
             <div class="mb-3">
                 <label for="date" class="form-label">Date</label>
-                <input type="text" class="form-control" id="date" name="date">
+                <input type="text" class="form-control" id="date" name="date" value="<%-post.date%>">
             </div>
             <div class="mb-3">
                 <label for="author" class="form-label">Author</label>
-                <input type="text" class="form-control" id="author" name="author">
+                <input type="text" class="form-control" id="author" name="author" value="<%-post.author%>">
             </div>
             <div class="mb-3">
                 <label for="imgURL" class="form-label">imgURL</label>
-                <input type="text" class="form-control" id="imgURL" name="imgURL">
+                <input type="text" class="form-control" id="imgURL" name="imgURL" value="<%-post.imgURL%>">
             </div>
             <div class="mb-3">
                 <label for="description" class="form-label">Description</label>
-                <input type="text" class="form-control" id="description" name="description" >
+                <input type="text" class="form-control" id="description" name="description" value="<%-post.description%>">
             </div>
-            <button type="submit" class="btn btn-primary">Add</button>
+            <input type="hidden" value="<%-post.id%>" name="id" id="id">
+            <button type="submit" class="btn btn-primary">Save</button>
         </form>
 
     </div>
 
     <footer>
-        <%- include('../partials/footer')%>
+        <%- include('../../partials/footer')%>
     </footer>
 
-    <%- include('../partials/bootstrapJS.ejs')%>
+    <%- include('../../partials/bootstrapJS.ejs')%>
 </body>
 
 </html>

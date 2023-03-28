@@ -8,12 +8,12 @@ router.get("/", (req, res) => {
   res.render("pages/home");
 });
 
-router.post("/subscribeForUpdates", (req, res) => {
+router.post("/subscribe_for_updates", (req, res) => {
   const { email } = req.body;
 
   if (validator.isValidEmail(email)) {
-    mailer.subscribeForUpdates(email);
     mailDB.registerEmailSubscription(email);
+    mailer.subscribeForUpdates(email);
   }
 
   res.redirect("back");

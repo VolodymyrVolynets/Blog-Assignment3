@@ -7,27 +7,27 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="/stylesheet/header.css">
   <link rel="stylesheet" href="/stylesheet/body.css">
-  <%- include('../partials/bootstrapStyle.ejs')%>
+  <%- include('../../partials/bootstrapStyle.ejs')%>
     <title>Document</title>
 </head>
 
 <body>
   <header>
-    <%- include('../partials/header')%>
+    <%- include('../../partials/header')%>
   </header>
   <div class="content body-content">
 
-    <a class="btn btn-primary" href="../admin/users" role="button">Users</a>
-    <a class="btn btn-primary" href="../admin/posts" role="button">Posts</a>
-    <a class="btn btn-primary" href="../admin/comments" role="button">Comments</a>
+    <a class="btn btn-primary" href="/admin/users" role="button">Users</a>
+    <a class="btn btn-primary" href="/admin/posts" role="button">Posts</a>
+    <a class="btn btn-primary" href="/admin/comments" role="button">Comments</a>
 
   </div>
 
   <footer>
-    <%- include('../partials/footer')%>
+    <%- include('../../partials/footer')%>
   </footer>
 
-  <%- include('../partials/bootstrapJS.ejs')%>
+  <%- include('../../partials/bootstrapJS.ejs')%>
 </body>
 
 </html>

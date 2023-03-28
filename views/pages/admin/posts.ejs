@@ -7,18 +7,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/stylesheet/header.css">
     <link rel="stylesheet" href="/stylesheet/body.css">
-    <%- include('../partials/bootstrapStyle.ejs')%>
+    <%- include('../../partials/bootstrapStyle.ejs')%>
         <title>Document</title>
 </head>
 
 <body>
     <header>
-        <%- include('../partials/header')%>
+        <%- include('../../partials/header')%>
     </header>
     <div class="content body-content">
 
-        <a class="btn btn-primary" href="./" role="button">Back</a>
-        <a class="btn btn-primary" href="./newpost" role="button">Add New</a>
+        <a class="btn btn-primary" href="/admin" role="button">Back</a>
+        <a class="btn btn-primary" href="/admin/posts/new" role="button">Add New</a>
 
 
         <table class="table">
@@ -41,8 +41,8 @@
                         <td><%- posts[i].title%></td>
                         <td><%- posts[i].author%></td>
                         <td><%- posts[i].description%></td>
-                        <td><a href="./removepost?id=<%- posts[i].id%>">remove</a></td>
-                        <td><a href="./editpost?id=<%- posts[i].id%>">edit</a></td>
+                        <td><a href="/admin/posts/remove?id=<%- posts[i].id%>">remove</a></td>
+                        <td><a href="/admin/posts/edit?id=<%- posts[i].id%>">edit</a></td>
                     </tr>
                     <% } %>
             </tbody>
@@ -50,10 +50,10 @@
     </div>
 
     <footer>
-        <%- include('../partials/footer')%>
+        <%- include('../../partials/footer')%>
     </footer>
 
-    <%- include('../partials/bootstrapJS.ejs')%>
+    <%- include('../../partials/bootstrapJS.ejs')%>
 </body>
 
 </html>

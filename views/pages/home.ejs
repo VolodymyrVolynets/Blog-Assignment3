@@ -37,15 +37,24 @@
       </div>
       <% } %>
 
-      <div class="jumbotron jumbotron-fluid">
-        <div class="container">
-          <h1 class="display-4">Introduction</h1>
-          <p class="lead">Welcome to our game blog website, your one-stop destination for all things gaming! Here, you will find a wide range of articles and reviews on the latest and greatest video games, as well as news and updates from the gaming industry.</p>
-          <p class="lead">Our team of experienced writers and passionate gamers are dedicated to providing you with high-quality content that covers all genres and platforms, from action-packed shooters to immersive RPGs and everything in between. We aim to offer insightful and informative articles that help you make informed decisions on what games to play and how to get the most out of them.</p>
-          <p class="lead">Whether you are a hardcore gamer or just starting out, our blog has something for everyone. We cover all the major consoles and platforms, including PC, Xbox, PlayStation, and Nintendo, and we are always on the lookout for new and exciting games to share with our readers.</p>
-          <p class="lead">So, whether you are looking for the latest news on upcoming releases, in-depth reviews of the hottest games, or expert tips and tricks to help you improve your gameplay, you have come to the right place. Join us on our gaming journey and let's explore the wonderful world of gaming together!</p>
+        <div class="jumbotron jumbotron-fluid">
+          <div class="container">
+            <h1 class="display-4">Introduction</h1>
+            <p class="lead">Welcome to our game blog website, your one-stop destination for all things gaming! Here, you
+              will find a wide range of articles and reviews on the latest and greatest video games, as well as news and
+              updates from the gaming industry.</p>
+            <p class="lead">Our team of experienced writers and passionate gamers are dedicated to providing you with
+              high-quality content that covers all genres and platforms, from action-packed shooters to immersive RPGs
+              and everything in between. We aim to offer insightful and informative articles that help you make informed
+              decisions on what games to play and how to get the most out of them.</p>
+            <p class="lead">Whether you are a hardcore gamer or just starting out, our blog has something for everyone.
+              We cover all the major consoles and platforms, including PC, Xbox, PlayStation, and Nintendo, and we are
+              always on the lookout for new and exciting games to share with our readers.</p>
+            <p class="lead">So, whether you are looking for the latest news on upcoming releases, in-depth reviews of
+              the hottest games, or expert tips and tricks to help you improve your gameplay, you have come to the right
+              place. Join us on our gaming journey and let's explore the wonderful world of gaming together!</p>
+          </div>
         </div>
-      </div>
 
         <div class="flex">
 
@@ -57,7 +66,8 @@
                   <div class="card-body">
                     <h5 class="card-title"><%-posts[i].title%></h5>
                     <p class="card-text"><%-posts[i].description%></p>
-                    <a href="./post?id=<%-posts[i].id%>" class="btn btn-primary" style="background-color:#FFA400;">Explore</a>
+                    <a href="./post?id=<%-posts[i].id%>" class="btn btn-primary"
+                      style="background-color:#FFA400;">Explore</a>
                   </div>
                 </div>
                 <% } %>
@@ -78,8 +88,9 @@
 
                   <div class="input-group mb-3 mt-4">
 
-                    <form action="./mail/subscribeForUpdates" method="POST">
-                      <input type="text" class="form-control" placeholder="Enter email" aria-label="Recipient's username" aria-describedby="button-addon2" id="email" name="email">
+                    <form action="/mail/subscribe_for_updates" method="POST">
+                      <input type="text" class="form-control" placeholder="Enter email"
+                        aria-label="Recipient's username" aria-describedby="button-addon2" id="email" name="email">
                       <button class="btn btn-success border-rad" type="submit" id="button-addon2"
                         style="background-color:#FFA400;">Subscribe</button>
                     </form>

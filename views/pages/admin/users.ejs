@@ -7,36 +7,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/stylesheet/header.css">
     <link rel="stylesheet" href="/stylesheet/body.css">
-    <%- include('../partials/bootstrapStyle.ejs')%>
+    <%- include('../../partials/bootstrapStyle.ejs')%>
         <title>Document</title>
 </head>
 
 <body>
     <header>
-        <%- include('../partials/header')%>
+        <%- include('../../partials/header')%>
     </header>
     <div class="content body-content">
 
-        <a class="btn btn-primary" href="./" role="button">Back</a>
+        <a class="btn btn-primary" href="/admin" role="button">Back</a>
 
 
         <table class="table">
             <thead>
                 <tr>
                     <th scope="col">id</th>
-                    <th scope="col">date</th>
-                    <th scope="col">comment</th>
+                    <th scope="col">username</th>
+                    <th scope="col">isAdmin</th>
                 </tr>
             </thead>
             <tbody>
 
 
-                <% for(var i=0; i < comments.length; i++) { %>
+                <% for(var i=0; i < users.length; i++) { %>
                     <tr>
-                        <th scope="row"><%- comments[i].id%></th>
-                        <td><%- comments[i].date%></td>
-                        <td><%- comments[i].comment%></td>
-                        <td><a href="./removecomment?id=<%- comments[i].id%>">remove</a></td>
+                        <th scope="row"><%- users[i].id%></th>
+                        <td><%- users[i].username%></td>
+                        <td><a href="/admin/users/toggle_is_admin?id=<%- users[i].id%>"><%- users[i].isAdmin%></a></td>
+                        <td><a href="/admin/users/remove?id=<%- users[i].id%>">remove</a></td>
                     </tr>
                     <% } %>
             </tbody>
@@ -44,10 +44,10 @@
     </div>
 
     <footer>
-        <%- include('../partials/footer')%>
+        <%- include('../../partials/footer')%>
     </footer>
 
-    <%- include('../partials/bootstrapJS.ejs')%>
+    <%- include('../../partials/bootstrapJS.ejs')%>
 </body>
 
 </html>
