@@ -23,9 +23,9 @@
         <table class="table">
             <thead>
                 <tr>
-                    <th scope="col">id</th>
-                    <th scope="col">username</th>
-                    <th scope="col">isAdmin</th>
+                    <th scope="col">ID</th>
+                    <th scope="col">Username</th>
+                    <th scope="col">Is Admin</th>
                 </tr>
             </thead>
             <tbody>
@@ -35,7 +35,7 @@
                     <tr>
                         <th scope="row"><%- users[i].id%></th>
                         <td><%- users[i].username%></td>
-                        <td><a href="/admin/users/toggle_is_admin?id=<%- users[i].id%>"><%- users[i].isAdmin%></a></td>
+                        <td><a href="/admin/users/toggle_is_admin?id=<%- users[i].id%>"><%- users[i].isAdmin == 1%></a></td>
                         <td><a href="/admin/users/remove?id=<%- users[i].id%>">remove</a></td>
                     </tr>
                     <% } %>

@@ -26,21 +26,22 @@
                 <input type="text" class="form-control" id="title" name="title">
             </div>
             <div class="mb-3">
-                <label for="date" class="form-label">Date</label>
-                <input type="text" class="form-control" id="date" name="date">
-            </div>
-            <div class="mb-3">
                 <label for="author" class="form-label">Author</label>
-                <input type="text" class="form-control" id="author" name="author">
+                <input type="text" class="form-control" id="author" name="author" value="<%-user.username%>">
             </div>
             <div class="mb-3">
-                <label for="imgURL" class="form-label">imgURL</label>
-                <input type="text" class="form-control" id="imgURL" name="imgURL">
+                <label for="date" class="form-label">Date</label>
+                <input type="date" class="form-control" id="date" name="date" value="<%-moment().format("YYYY-MM-DD")%>">
             </div>
             <div class="mb-3">
                 <label for="description" class="form-label">Description</label>
                 <input type="text" class="form-control" id="description" name="description" >
             </div>
+            <div class="mb-3">
+                <label for="imgURL" class="form-label">imgURL</label>
+                <input type="text" class="form-control" id="imgURL" name="imgURL">
+            </div>
+            
             <button type="submit" class="btn btn-primary">Add</button>
         </form>
 

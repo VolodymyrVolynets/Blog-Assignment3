@@ -23,9 +23,10 @@
         <table class="table">
             <thead>
                 <tr>
-                    <th scope="col">id</th>
-                    <th scope="col">date</th>
-                    <th scope="col">comment</th>
+                    <th scope="col">ID</th>
+                    <th scope="col">Username</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">Comment</th>
                 </tr>
             </thead>
             <tbody>
@@ -34,6 +35,7 @@
                 <% for(var i=0; i < comments.length; i++) { %>
                     <tr>
                         <th scope="row"><%- comments[i].id%></th>
+                        <td><%- comments[i].username%></td>
                         <td><%- comments[i].date%></td>
                         <td><%- comments[i].comment%></td>
                         <td><a href="/admin/comments/remove?id=<%- comments[i].id%>">remove</a></td>

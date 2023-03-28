@@ -7,12 +7,17 @@ async function isEmailSubscriptionExist(email) {
 }
 
 async function registerEmailSubscription(email) {
-    if (!isEmailSubscriptionExist(email)) {
+    if (!await isEmailSubscriptionExist(email)) {
         db.executeMYSQL("INSERT INTO email_subscribed (email) VALUES (?);", [email])
     }
 }
 
+async function getAllEmails() {
+    return await db.executeMYSQL("SELECT * FROM email_subscribed;")
+}
+
 module.exports = {
     registerEmailSubscription,
-    isEmailSubscriptionExist
+    isEmailSubscriptionExist,
+    getAllEmails
 }

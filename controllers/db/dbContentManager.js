@@ -46,17 +46,17 @@ async function getPostById(id) {
 }
 
 async function getCommentsForPost(postId) {
-  const comments = (await db.executeMYSQL("SELECT comments.date, comments.comment, users.username FROM comments INNER JOIN posts ON comments.post_id = posts.id INNER JOIN users ON comments.user_id = users.id WHERE posts.id = ?;", [postId]))
+  const comments = (await db.executeMYSQL("SELECT comments.date, comments.comment, users.username FROM comments INNER JOIN posts ON comments.postId = posts.id INNER JOIN users ON comments.userId = users.id WHERE posts.id = ?;", [postId]))
   return comments
 }
 
 async function newComment(postId, username, comment) {
   const userId = (await db.executeMYSQL('SELECT id FROM users WHERE users.username = ?;', [username]))[0]['id'] 
-  return await db.executeMYSQL("INSERT INTO comments (date, comment, post_id, user_id) VALUES (?, ?, ?, ?);", [moment().format('YYYY-MM-DD'), comment, postId, userId])
+  return await db.executeMYSQL("INSERT INTO comments (date, comment, postId, userId) VALUES (?, ?, ?, ?);", [moment().format('YYYY-MM-DD'), comment, postId, userId])
 }
 
 async function getAllComments() {
-  return await db.executeMYSQL("SELECT * FROM comments;")
+  return await db.executeMYSQL("SELECT comments.*, users.username FROM comments INNER JOIN users ON comments.userId = users.id;")
 }
 
 async function removeCommentById(id) {

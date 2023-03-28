@@ -27,3 +27,13 @@ exports.subscribeForUpdates = async (email) => {
         html: "<b>You Successfuly subscribed</b>", // html body
     })
 }
+
+exports.newPostNotification = async (email) => {
+  await transporter.sendMail({
+    from: '"Assignment3 Volodymyr Volynets" <assignment3volodymyrvolynets@gmail.com>', // sender address
+    to: email, // list of receivers
+    subject: "Check our blog, we have new post", // Subject line
+    text: "New post", // plain text body
+    html: "<b>New Post</b>", // html body
+})
+}

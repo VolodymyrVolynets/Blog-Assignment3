@@ -6,6 +6,7 @@ const middleware = require('./middleware/auth')
 
 const app = express()
 const port = process.env.PORT || 80
+app.locals.moment = require('moment');
 
 app.use(express.static('public'))
 
