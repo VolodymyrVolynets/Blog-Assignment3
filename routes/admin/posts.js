@@ -32,7 +32,7 @@ router.post("/new", async (req, res) => {
     const emailAdresses = await dbMails.getAllEmails()
 
     for (var i = 0; i < emailAdresses.length; i++) {
-        mailer.newPostNotification(emailAdresses[i].email)
+        mailer.newPostNotification(emailAdresses[i].email, title)
     }
     
     res.redirect('/admin/posts')

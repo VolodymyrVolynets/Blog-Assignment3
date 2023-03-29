@@ -4,10 +4,6 @@ const mailer = require("../controllers/mailer");
 const validator = require("../controllers/validator");
 const mailDB = require("../controllers/db/dbMails");
 
-router.get("/", (req, res) => {
-  res.render("pages/home");
-});
-
 router.post("/subscribe_for_updates", (req, res) => {
   const { email } = req.body;
 
@@ -18,5 +14,27 @@ router.post("/subscribe_for_updates", (req, res) => {
 
   res.redirect("back");
 });
+
+router.get("/cancel", async (req, res) => {
+  const { email } = req.query;
+
+  if (validator.isValidEmail(email)) {
+    await mailDB.removeEmailSuscription(email)
+  }
+
+  res.redirect("/");
+});
+
+// router.get("/test", async (req, res) => {
+//   const htmlPath = path.join(__dirname, "../views/emails/subscription.ejs")
+
+//   const emailTemplate = fs.readFileSync(htmlPath, 'utf8');
+//   const compiledEmailTemplate = ejs.compile(emailTemplate);
+//   const html = compiledEmailTemplate({ link: req.get('host') });
+
+  
+
+//   res.send(html);
+// });
 
 module.exports = router;

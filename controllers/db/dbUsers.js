@@ -25,7 +25,7 @@ async function newUser(username, hashedPass) {
 
 async function removeUserById(id) {
     await db.executeMYSQL("DELETE FROM users WHERE id = ?;", [id])
-  }
+}
   
 
 async function makeAdminUserById(id) {

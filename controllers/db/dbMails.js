@@ -12,6 +12,10 @@ async function registerEmailSubscription(email) {
     }
 }
 
+async function removeEmailSuscription(email) {
+    await db.executeMYSQL("DELETE FROM email_subscribed WHERE email = ?;", [email])
+}
+
 async function getAllEmails() {
     return await db.executeMYSQL("SELECT * FROM email_subscribed;")
 }
@@ -19,5 +23,6 @@ async function getAllEmails() {
 module.exports = {
     registerEmailSubscription,
     isEmailSubscriptionExist,
-    getAllEmails
+    getAllEmails,
+    removeEmailSuscription
 }

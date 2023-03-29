@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/stylesheet/header.css">
+  <link rel="stylesheet" href="/stylesheet/body.css">
+  <%- include('../partials/bootstrapStyle.ejs')%>
+    <title>Document</title>
+</head>
+
+<body>
+  <header>
+    <%- include('../partials/header')%>
+  </header>
+  <div class="content body-content">
+    <h1>About</h1>
+    <h5>This website is developed for Computer Science assignment by Volodymyr Volynets.</h5>
+    <p>Blog website written on Node JS using express framework. All data are stored in mysql database, users passwords are hashed for security reason. Access to admin panel have only users with admin access, admins can fully manipulate website contex and delete users or comments.</p>
+
+    <div class="card p-3">
+    <h2>Contact Us</h2>
+
+    <form id="contactForm">
+
+        <!-- Name Input -->
+        <div class="form-floating mb-3">
+          <input class="form-control" id="name" type="text" placeholder="Name" data-sb-validations="required" />
+          <label for="name">Name</label>
+          <div class="invalid-feedback" data-sb-feedback="name:required">Name is required.</div>
+        </div>
+
+        <!-- Email Input -->
+        <div class="form-floating mb-3">
+          <input class="form-control" id="emailAddress" type="email" placeholder="Email Address" data-sb-validations="required,email" />
+          <label for="emailAddress">Email Address</label>
+        </div>
+
+        <!-- Message Input -->
+        <div class="form-floating mb-3">
+          <textarea class="form-control" id="message" type="text" placeholder="Message" style="height: 10rem;" data-sb-validations="required"></textarea>
+          <label for="message">Message</label>
+        </div>
+
+        <!-- Submit button -->
+        <div class="d-grid">
+          <button class="btn btn-primary btn-lg" type="submit">Submit</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <footer>
+    <%- include('../partials/footer')%>
+  </footer>
+
+  <%- include('../partials/bootstrapJS.ejs')%>
+</body>
+
+</html>

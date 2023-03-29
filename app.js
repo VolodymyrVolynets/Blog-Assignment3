@@ -26,6 +26,6 @@ app.use('/admin', middleware.checkIfAdmin, require('./routes/admin/admin'))
 app.set('view engine', 'ejs')
 
 
-app.listen(port, () => {
+var server = app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })

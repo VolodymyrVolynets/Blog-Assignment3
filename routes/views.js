@@ -46,4 +46,10 @@ router.get("/blog", async (req, res) => {
   });
 });
 
+router.get("/about", async (req, res) => {
+  res.render("pages/about", {
+    user: req.user
+  });
+});
+
 module.exports = router;

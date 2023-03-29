@@ -27,7 +27,7 @@ function getLatestCarosel() {
 }
 
 async function getPosts() {
-  const result = await db.executeMYSQL("SELECT * FROM posts;");
+  const result = await db.executeMYSQL("SELECT * FROM posts ORDER BY id DESC;");
   return result;
 }
 
@@ -76,11 +76,6 @@ async function updatePost(date, title, author, description, imgURL, id) {
 }
 
 async function addPost(date, title, author, description, imgURL) {
-  console.log(date)
-  console.log(title)
-  console.log(author)
-  console.log(description)
-  console.log(imgURL)
   await db.executeMYSQL("INSERT INTO posts (date, title, author, description, imgURL) VALUES (?, ?, ?, ?, ?);", [date, title, author, description, imgURL])
 }
 
