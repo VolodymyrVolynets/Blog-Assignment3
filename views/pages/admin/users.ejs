@@ -10,6 +10,7 @@
         <div class="content body-content">
 
             <a class="btn btn-primary" href="/admin" role="button">Back</a>
+            <a class="btn btn-success" href="/admin/users/add_user" role="button">Add User</a>
 
             <div class="mb-3">
                 <input type="text" class="form-control mt-3" id="searchInput" placeholder="Search">
@@ -23,6 +24,7 @@
                         <th scope="col">Name</th>
                         <th scope="col">Email</th>
                         <th scope="col">Is Admin</th>
+                        <th scope="col">Is verified</th>
                         <th scope="col">Action</th>
                     </tr>
                 </thead>
@@ -35,6 +37,10 @@
                             <td><%- users[i].email%></td>
                             <td><a href="/admin/users/toggle_is_admin?id=<%- users[i].id%>"><%-
                                         users[i].isAdmin==1%></a></td>
+                            <td>
+                                <a href="/admin/users/toggle_is_verified?id=<%- users[i].id%>"><%-
+                                        users[i].is_verified==1%></a>
+                            </td>
                             <td><a href="/admin/users/remove?id=<%- users[i].id%>">remove</a></td>
                         </tr>
                         <% } %>

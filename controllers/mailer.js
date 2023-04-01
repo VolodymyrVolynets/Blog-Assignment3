@@ -34,7 +34,7 @@ exports.subscribeForUpdates = async (email) => {
   });
 
     await transporter.sendMail({
-        from: '"Assignment3 Volodymyr Volynets" <assignment3volodymyrvolynets@gmail.com>', // sender address
+        from: `"Assignment3 Volodymyr Volynets" ,${process.env.EMAIL}>`, // sender address
         to: email, // list of receivers
         subject: "Subscribe for updates", // Subject line
         text: "You Successfuly subscribed", // plain text body
@@ -59,7 +59,7 @@ exports.newPostNotification = async (email, id) => {
   });
 
   await transporter.sendMail({
-    from: '"Assignment3 Volodymyr Volynets" <assignment3volodymyrvolynets@gmail.com>', // sender address
+    from: `"Assignment3 Volodymyr Volynets" ,${process.env.EMAIL}>`, // sender address
     to: email, // list of receivers
     subject: "Check our blog, we have new post", // Subject line
     text: "New post", // plain text body
@@ -76,7 +76,7 @@ exports.verifyEmail = async (email, username) => {
   const html = compiledEmailTemplate({ username: username, verifyURL: verifyURL });
 
   await transporter.sendMail({
-    from: '"Assignment3 Volodymyr Volynets" <assignment3volodymyrvolynets@gmail.com>', // sender address
+    from: `"Assignment3 Volodymyr Volynets" ,${process.env.EMAIL}>`, // sender address
     to: email, // list of receivers
     subject: "Verify Your Email Address", // Subject line
     text: "Verify Email Address", // plain text body
@@ -92,7 +92,7 @@ exports.resetPassword = async (email, token) => {
   const html = compiledEmailTemplate({ resetURL: resetURL });
 
   await transporter.sendMail({
-    from: '"Assignment3 Volodymyr Volynets" <assignment3volodymyrvolynets@gmail.com>', // sender address
+    from: `"Assignment3 Volodymyr Volynets" ,${process.env.EMAIL}>`, // sender address
     to: email, // list of receivers
     subject: "Reset Password", // Subject line
     text: "Reset Password", // plain text body

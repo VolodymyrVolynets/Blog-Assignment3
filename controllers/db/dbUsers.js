@@ -28,9 +28,16 @@ async function getAllUsers() {
     return db.executeMYSQL("SELECT * FROM users;")
 }
 
-async function newUser(username, hashedPass, name, email) {
-    const isAdmin = false;
-    const is_verified = false;
+async function isVerifiedById(id) {
+    const user = (await db.executeMYSQL("SELECT * FROM users WHERE id = ?", [id]))[0]
+    return user["is_verified"] === 1
+}
+
+async function makeVerifiedUserById(id) {
+  await db.executeMYSQL("UPDATE users SET is_verified = 1 WHERE id = ?;", [id])
+}
+
+async function newUser(username, hashedPass, name, email, isAdmin = false, is_verified = false) {
     return db.executeMYSQL(
       "INSERT INTO users (username, password, isAdmin, name, email, is_verified) VALUES (?, ?, ?, ?, ?, ?)",
       [username, hashedPass, isAdmin, name, email, is_verified]
@@ -70,7 +77,6 @@ async function isAdminByUsername(username) {
         const user = (await db.executeMYSQL("SELECT * FROM users WHERE username = ?", [username]))[0]
       return user["isAdmin"] === 1
     } catch (err) {
-      console.error(err)
       return false
     }
   }
@@ -79,9 +85,12 @@ async function isVerifiedByUsername(username) {
     const user = (await db.executeMYSQL("SELECT * FROM users WHERE username = ?", [username]))[0]
     return user["is_verified"] === 1
   } catch (err) {
-    console.error(err)
     return false
   }
+}
+
+async function removeVerifiedUserById(id) {
+    await db.executeMYSQL("UPDATE users SET is_verified = 0 WHERE id = ?;", [id])
 }
 
 async function updatePassword(username, password) {
@@ -108,5 +117,8 @@ module.exports = {
     verifyUserByEmail,
     isVerifiedByUsername,
   updatePassword,
-  getUsernameByEmail
+  getUsernameByEmail,
+  isVerifiedById,
+  makeVerifiedUserById,
+  removeVerifiedUserById
 }

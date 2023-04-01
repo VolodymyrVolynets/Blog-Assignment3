@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../../partials/head')%>
+
+    <body>
+        <%- include('../../partials/header')%>
+        <div class="content body-content">
+            <a class="btn btn-primary mb-3" href="/admin/users" role="button">Back</a>
+            <div class="card">
+                <div class="card-body">
+                    <form action="/admin/users/add_user" method="POST" id="add-user-form">
+                        <div class="mb-3">
+                            <label for="username" class="form-label">Username</label>
+                            <input type="text" class="form-control" id="username" name="username" required>
+                            <div class="invalid-feedback">Username must be 5-16 characters long and can only contain
+                                letters and numbers.</div>
+                            <div class="valid-feedback">Looks good!</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="password" name="password" required>
+                            <div class="invalid-feedback">Password must be 5-16 characters long and can only contain
+                                letters and numbers.</div>
+                            <div class="valid-feedback">Looks good!</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Name</label>
+                            <input type="text" class="form-control" id="name" name="name" required>
+                            <div class="invalid-feedback">Please enter a name.</div>
+                            <div class="valid-feedback">Looks good!</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email address</label>
+                            <input type="email" class="form-control" id="email" name="email" required>
+                            <div class="invalid-feedback">Please enter a valid email address.</div>
+                            <div class="valid-feedback">Looks good!</div>
+                        </div>
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" id="isAdmin" name="isAdmin" value="1">
+                            <label class="form-check-label" for="isAdmin">Is admin</label>
+                        </div>
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" id="isVerified" name="isVerified" value="1">
+                            <label class="form-check-label" for="isVerified">Is verified</label>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary" disabled>Add User</button>
+                    </form>
+                </div>
+            </div>
+            <%- include('../../partials/alert')%>
+        </div>
+
+        <%- include('../../partials/footer')%>
+            <script>const usernameInput = document.getElementById('username');
+                const passwordInput = document.getElementById('password');
+                const emailInput = document.getElementById('email');
+                const nameInput = document.getElementById('name');
+                const submitButton = document.querySelector('button[type="submit"]');
+
+                const pattern = /^[a-zA-Z0-9]{5,16}$/;
+                const emailPattern = /^\S+@\S+\.\S+$/;
+                const namePattern = /^[a-zA-Z ]{2,30}$/;
+
+                function validateInput(input, pattern) {
+                    return pattern.test(input.value);
+                }
+
+                function checkInputs() {
+                    const isUsernameValid = validateInput(usernameInput, pattern);
+                    const isPasswordValid = validateInput(passwordInput, pattern);
+                    const isEmailValid = validateInput(emailInput, emailPattern);
+                    const isNameValid = validateInput(nameInput, namePattern);
+
+                    usernameInput.classList.toggle('is-valid', isUsernameValid);
+                    usernameInput.classList.toggle('is-invalid', !isUsernameValid);
+
+                    passwordInput.classList.toggle('is-valid', isPasswordValid);
+                    passwordInput.classList.toggle('is-invalid', !isPasswordValid);
+
+                    emailInput.classList.toggle('is-valid', isEmailValid);
+                    emailInput.classList.toggle('is-invalid', !isEmailValid);
+
+                    nameInput.classList.toggle('is-valid', isNameValid);
+                    nameInput.classList.toggle('is-invalid', !isNameValid);
+
+                    submitButton.disabled = !(isUsernameValid && isPasswordValid && isEmailValid && isNameValid);
+                }
+
+                usernameInput.addEventListener('input', checkInputs);
+                passwordInput.addEventListener('input', checkInputs);
+                emailInput.addEventListener('input', checkInputs);
+                nameInput.addEventListener('input', checkInputs);
+            </script>
+    </body>>
+
+</html>>
