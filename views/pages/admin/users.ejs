@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="/stylesheet/header.css">
     <link rel="stylesheet" href="/stylesheet/body.css">
     <%- include('../../partials/bootstrapStyle.ejs')%>
-        <title>Document</title>
+    <title>User List</title>
 </head>
 
 <body>
@@ -19,26 +19,32 @@
 
         <a class="btn btn-primary" href="/admin" role="button">Back</a>
 
+        <div class="mb-3">
+            <input type="text" class="form-control mt-3" id="searchInput" placeholder="Search">
+        </div>
 
         <table class="table">
             <thead>
                 <tr>
                     <th scope="col">ID</th>
                     <th scope="col">Username</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Email</th>
                     <th scope="col">Is Admin</th>
+                    <th scope="col">Action</th>
                 </tr>
             </thead>
             <tbody>
-
-
                 <% for(var i=0; i < users.length; i++) { %>
-                    <tr>
-                        <th scope="row"><%- users[i].id%></th>
-                        <td><%- users[i].username%></td>
-                        <td><a href="/admin/users/toggle_is_admin?id=<%- users[i].id%>"><%- users[i].isAdmin == 1%></a></td>
-                        <td><a href="/admin/users/remove?id=<%- users[i].id%>">remove</a></td>
-                    </tr>
-                    <% } %>
+                <tr>
+                    <th scope="row"><%- users[i].id%></th>
+                    <td><%- users[i].username%></td>
+                    <td><%- users[i].name%></td>
+                    <td><%- users[i].email%></td>
+                    <td><a href="/admin/users/toggle_is_admin?id=<%- users[i].id%>"><%- users[i].isAdmin == 1%></a></td>
+                    <td><a href="/admin/users/remove?id=<%- users[i].id%>">remove</a></td>
+                </tr>
+                <% } %>
             </tbody>
         </table>
     </div>
@@ -48,6 +54,36 @@
     </footer>
 
     <%- include('../../partials/bootstrapJS.ejs')%>
+
+    <script>
+        const searchInput = document.getElementById("searchInput");
+        searchInput.addEventListener("keyup", () => {
+            const inputText = searchInput.value.toLowerCase().trim();
+            const tableRows = document.getElementsByTagName("tbody")[0].getElementsByTagName("tr");
+
+            for (let i = 0; i < tableRows.length; i++) {
+                const tableData = tableRows[i].getElementsByTagName("td");
+
+                let foundMatch = false;
+
+                for (let j = 0; j < tableData.length; j++) {
+                    const cellData = tableData[j].innerHTML.toLowerCase().trim();
+
+                    if (cellData.includes(inputText)) {
+                        foundMatch = true;
+                        break;
+                    }
+                }
+
+                if (foundMatch) {
+                    tableRows[i].style.display = "";
+                } else {
+                    tableRows[i].style.display = "none";
+                }
+            }
+        });
+    </script>
+
 </body>
 
 </html>

@@ -113,7 +113,44 @@
   <footer>
     <%- include('../partials/footer')%>
   </footer>
-
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const textArea = document.querySelector('.textarea');
+      const submitButton = document.querySelector('button[type="submit"]');
+      const textRightDiv = textArea.closest('.d-flex').nextElementSibling;
+  
+      const charCount = document.createElement('small');
+      charCount.textContent = '0/1000';
+      charCount.classList.add('text-muted');
+  
+      const errorText = document.createElement('p');
+      errorText.textContent = 'Your comment must not exceed 1000 characters and not contain special characters.';
+      errorText.classList.add('text-danger', 'd-none');
+  
+      textRightDiv.prepend(charCount);
+      textRightDiv.prepend(errorText);
+  
+      function validateComment(text) {
+        const pattern = /^[^`'"\\]*$/;
+        return pattern.test(text) && text.length <= 1000 && text.length > 0;
+      }
+  
+      function checkCommentLength() {
+        const commentLength = textArea.value.length;
+        charCount.textContent = `${commentLength}/1000`;
+  
+        if (!validateComment(textArea.value)) {
+          submitButton.disabled = true;
+          errorText.classList.remove('d-none');
+        } else {
+          submitButton.disabled = false;
+          errorText.classList.add('d-none');
+        }
+      }
+  
+      textArea.addEventListener('input', checkCommentLength);
+    });
+  </script>
   <%- include('../partials/bootstrapJS.ejs')%>
 </body>
 

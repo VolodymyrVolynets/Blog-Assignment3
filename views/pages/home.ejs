@@ -17,12 +17,12 @@
   </header>
   <div class="content body-content">
 
-    <% if (typeof(carousel) !="undefined" ) { %>
+    <% if (typeof(posts) !="undefined" ) { %>
       <div id="carouselExampleIndicators" class="carousel slide carousel-fade" data-ride="carousel">
         <div class="carousel-inner">
-          <% for(let i=0; i < carousel.length; i++) { %>
+          <% for(let i=0; i < posts.length; i++) { %>
             <div class="carousel-item <%- i == 0 ? 'active' : ''%>" data-interval="5000">
-              <img class="d-block w-100" src="<%- carousel[i]['url']%>" alt="Second slide">
+              <img class="d-block w-100" src="<%- posts[i]['imgURL']%>" alt="Second slide">
             </div>
             <% } %>
         </div>
@@ -65,7 +65,7 @@
                   <img class="card-img-top" src=<%- posts[i].imgURL%> alt="Card image cap">
                   <div class="card-body">
                     <h5 class="card-title"><%-posts[i].title%></h5>
-                    <p class="card-text"><%-posts[i].description%></p>
+                    <p class="card-text"><%-posts[i].description.substring(0, 150) + (posts[i].description.length > 150 ? '...' : '') %></p>
                     <a href="./post?id=<%-posts[i].id%>" class="btn btn-primary"
                       style="background-color:#FFA400;">Explore</a>
                   </div>

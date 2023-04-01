@@ -2,14 +2,15 @@ const jwt = require("./jwt");
 const usersDB = require("./db/dbUsers");
 const hash = require("./hash");
 const validator = require("./validator");
+const mailer = require('./mailer')
 
 
 exports.register = async (req, res) => {
-  const { username, password, confirmPassword } = req.body;
+  const { username, password, confirmPassword, name, email } = req.body;
 
-  //Check for valid input
-  const inputData = validator.genInputDataJSON(username);
-  if (password != confirmPassword) {
+  // Check for valid input
+  const inputData = validator.genInputDataJSON(username, name, email);
+  if (password !== confirmPassword) {
     return res.render("pages/registration", {
       user: req.user,
       message: validator.genMessageDataJSON("Passwords do not match"),
@@ -17,16 +18,18 @@ exports.register = async (req, res) => {
     });
   } else if (
     !validator.isValidInput(password) ||
-    !validator.isValidInput(username)
+    !validator.isValidInput(username) ||
+    !validator.isValidName(name) ||
+    !validator.isValidEmail(email)
   ) {
     return res.render("pages/registration", {
       user: req.user,
-      message: validator.genMessageDataJSON("Password and username should contains digits or lettes and 5-16 symbols length"),
+      message: validator.genMessageDataJSON("Invalid input"),
       input: inputData,
     });
   }
 
-  //if inputs valid check if user already exist
+  // Check if user already exists
   try {
     if (await usersDB.isUserExist(username)) {
       return res.render("pages/registration", {
@@ -34,18 +37,25 @@ exports.register = async (req, res) => {
         message: validator.genMessageDataJSON("Username already taken"),
         input: inputData,
       });
+    } else if (await usersDB.isEmailExist(email)) {
+      return res.render("pages/registration", {
+        user: req.user,
+        message: validator.genMessageDataJSON("Email already in use"),
+        input: inputData,
+      });
     } else {
-      //if user not exist create new user and redirect to a home page
+      // Create new user and redirect to home page
       const hashedPass = await hash.hash(password);
-      await usersDB.newUser(username, hashedPass)
+      await usersDB.newUser(username, hashedPass, name, email);
 
-      //generate JWT Token
-      const token = jwt.generateAccessToken({ username: username });
+      // Generate JWT Token
+      const token = jwt.generateAccessToken({ username });
       res.cookie("token", token, { maxAge: 3600000, httpOnly: true });
+      mailer.verifyEmail(email, username)
       return res.redirect("/");
     }
   } catch (err) {
-    //if error with db
+    // If error with db
     return res.render("pages/registration", {
       user: req.user,
       message: validator.genMessageDataJSON("Unknown Error"),
@@ -80,7 +90,14 @@ exports.login = async (req, res) => {
     //if user exist try to login
     const user = await usersDB.getUser(username);
     const isCorrectPassword = await hash.check(password, user.password);
-
+    const isVerified = usersDB.isVerifiedByUsername(username)
+    if (!isVerified) {
+      return res.render("pages/login", {
+        user: req.user,
+        message: validator.genMessageDataJSON("Email not verified", true),
+        input: inputData,
+      });
+    }
     //if password incorect try again
     if (!isCorrectPassword) {
       return res.render("pages/login", {

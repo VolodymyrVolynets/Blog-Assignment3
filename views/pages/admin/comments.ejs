@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="/stylesheet/header.css">
     <link rel="stylesheet" href="/stylesheet/body.css">
     <%- include('../../partials/bootstrapStyle.ejs')%>
-        <title>Document</title>
+        <title>Comments List</title>
 </head>
 
 <body>
@@ -19,6 +19,16 @@
 
         <a class="btn btn-primary" href="/admin/" role="button">Back</a>
 
+        <div class="mb-3">
+            <input type="text" class="form-control mt-3" id="searchInput" placeholder="Search">
+        </div>
+
+        <div class="form-check mb-3">
+            <input class="form-check-input" type="checkbox" id="new-comments-only">
+            <label class="form-check-label" for="new-comments-only">
+                Display only new comments (less than 24h)
+            </label>
+        </div>
 
         <table class="table">
             <thead>
@@ -27,11 +37,10 @@
                     <th scope="col">Username</th>
                     <th scope="col">Date</th>
                     <th scope="col">Comment</th>
+                    <th scope="col">Action</th>
                 </tr>
             </thead>
             <tbody>
-
-
                 <% for(var i=0; i < comments.length; i++) { %>
                     <tr>
                         <th scope="row"><%- comments[i].id%></th>
@@ -50,6 +59,54 @@
     </footer>
 
     <%- include('../../partials/bootstrapJS.ejs')%>
+
+        <script>
+            function parseDate(input) {
+                var parts = input.match(/(\d+)/g);
+                return new Date(parts[0], parts[1] - 1, parts[2]); // Note: months are 0-based
+            }
+
+            function filterComments() {
+                const inputText = searchInput.value.toLowerCase().trim();
+                const tableRows = document.getElementsByTagName("tbody")[0].getElementsByTagName("tr");
+                const onlyNew = document.getElementById("new-comments-only").checked;
+                const filterDate = new Date();
+                filterDate.setDate(filterDate.getDate() - 1);
+
+                for (let i = 0; i < tableRows.length; i++) {
+                    const tableData = tableRows[i].getElementsByTagName("td");
+                    const commentDate = parseDate(tableData[1].textContent.trim());
+                    let foundMatch = false;
+
+                    if (onlyNew && commentDate < filterDate) {
+                        tableRows[i].style.display = "none";
+                        continue;
+                    }
+
+                    for (let j = 0; j < tableData.length; j++) {
+                        const cellData = tableData[j].innerHTML.toLowerCase().trim();
+
+                        if (cellData.includes(inputText)) {
+                            foundMatch = true;
+                            break;
+                        }
+                    }
+
+                    if (foundMatch) {
+                        tableRows[i].style.display = "";
+                    } else {
+                        tableRows[i].style.display = "none";
+                    }
+                }
+            }
+
+            const searchInput = document.getElementById("searchInput");
+            searchInput.addEventListener("keyup", filterComments);
+
+            const newCommentsCheckbox = document.getElementById("new-comments-only");
+            newCommentsCheckbox.addEventListener("change", filterComments);
+        </script>
+
 </body>
 
 </html>

@@ -13,11 +13,13 @@ function genMessageDataJSON(text = '', isError = true) {
     }
 }
 
-function genInputDataJSON(username = '') {
+function genInputDataJSON(username = '', name = '', email = '' ) {
     return {
-            username: username
-    }
-}
+      username,
+      name,
+      email,
+    };
+  }
 
 
 function isValidInput(input) {
@@ -25,6 +27,11 @@ function isValidInput(input) {
     const isValid = regex.test(input)
     return isValid
 }
+
+function isValidName(name) {
+    const regex = /^[a-zA-Z]+(\s[a-zA-Z]+)*$/;
+    return regex.test(name);
+  }
 
 function isValidEmail(email) {
     const regex = new RegExp("^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$")
@@ -37,9 +44,19 @@ function isNumeric(value) {
 }
 
 function isValidText(text) {
-    return /^[A-Za-z0-9\s.,;]*$/.test(text)
+    const regex = new RegExp("^[a-zA-Z0-9]{5,16}$")
+    const isValid = regex.test(text)
+    return isValid
 }
 
 
-
-module.exports = { genUserDataJSON, genMessageDataJSON, genInputDataJSON, isValidInput, isValidEmail, isNumeric, isValidText }
+module.exports = {
+    genUserDataJSON,
+    genMessageDataJSON,
+    genInputDataJSON,
+    isValidInput,
+    isValidEmail,
+    isNumeric,
+    isValidText,
+    isValidName
+}

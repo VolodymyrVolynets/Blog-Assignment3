@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 
-function generateAccessToken(data) {
-    return jwt.sign(data, process.env.JWT_TOKEN, { expiresIn: '1h' });
+function generateAccessToken(data, expireIn = '24h') {
+    return jwt.sign(data, process.env.JWT_TOKEN, { expiresIn: expireIn });
 }
 
 function checkToken(token) {
@@ -9,7 +9,7 @@ function checkToken(token) {
     try {
         payload = jwt.verify(token, process.env.JWT_TOKEN)
     } catch (err) {
-
+        return null
     }
     return payload
 }

@@ -30,9 +30,11 @@ router.post("/new", async (req, res) => {
     await contentManager.addPost(dateString, title, author, description, imgURL)
 
     const emailAdresses = await dbMails.getAllEmails()
-
-    for (var i = 0; i < emailAdresses.length; i++) {
-        mailer.newPostNotification(emailAdresses[i].email, title)
+    const postID = await contentManager.getPostId(dateString, title, author, description, imgURL);
+    if (postID) {
+        for (var i = 0; i < emailAdresses.length; i++) {
+            mailer.newPostNotification(emailAdresses[i].email, postID)
+        }
     }
     
     res.redirect('/admin/posts')

@@ -17,24 +17,68 @@
   </header>
   <div class="content body-content">
     <h1>Blog</h1>
-
-
-          <div class="flex flex-wrap vertical" style="width: 100%">
-            <% if(typeof(posts) !="undefined" ) { %>
-              <% for(let i=0; i < posts.length; i++) { %>
-                <div class="card" style="width: 18rem; width: 100%;">
-                  <img class="card-img-top" src=<%- posts[i].imgURL%> alt="Card image cap">
-                  <div class="card-body">
-                    <h5 class="card-title"><%-posts[i].title%></h5>
-                    <p class="card-text"><%-posts[i].description%></p>
-                    <a href="./post?id=<%-posts[i].id%>" class="btn btn-primary" style="background-color:#FFA400;">Explore</a>
-                  </div>
-                </div>
-                <% } %>
-                  <% } %>
+  
+    <div class="form-group">
+      <label for="search">Search posts:</label>
+      <input type="text" class="form-control" id="search" name="q">
+    </div>
+  
+    <div id="search-results" class="row" style="display: flex; flex-wrap: wrap;"></div>
+  
+    <div class="row" id="posts-container" style="display: flex; flex-wrap: wrap;">
+      <% if(typeof(posts) !="undefined" ) { %>
+        <% for(let i=0; i < posts.length; i++) { %>
+          <div class="col-md-6" id="post-card" style="margin-bottom: 20px;">
+            <div class="card" style="width: 100%;">
+              <img class="card-img-top" src=<%- posts[i].imgURL%> alt="Card image cap">
+              <div class="card-body">
+                <h5 class="card-title"><%-posts[i].title%></h5>
+                <p class="card-text"><%-posts[i].description.substring(0, 150) + (posts[i].description.length > 150 ? '...' : '') %></p>
+                <a href="./post?id=<%-posts[i].id%>" class="btn btn-primary" style="background-color:#FFA400;">Explore</a>
+              </div>
+            </div>
           </div>
-
+        <% } %>
+      <% } %>
+    </div>
+  
   </div>
+  
+
+<script>
+  const searchInput = document.getElementById('search');
+  const postsContainer = document.getElementById('posts-container');
+  const searchResults = document.getElementById('search-results');
+
+  searchInput.addEventListener('input', () => {
+    const searchValue = searchInput.value.toLowerCase();
+    const posts = document.querySelectorAll('#posts-container #post-card');
+
+    searchResults.innerHTML = '';
+    searchResults.textContent =   '';
+    console.log(posts)
+    posts.forEach((post) => {
+      const title = post.querySelector('.card-title').textContent.toLowerCase();
+      const description = post.querySelector('.card-text').textContent.toLowerCase();
+
+      if (title.includes(searchValue) || description.includes(searchValue)) {
+        const postClone = post.cloneNode(true);
+        postClone.style.display = '';
+        searchResults.appendChild(postClone);
+      }
+      post.style.display = 'none';
+    });
+
+    if (searchValue === '') {
+      searchResults.innerHTML = '';
+      posts.forEach((post) => {
+        post.style.display = '';
+      });
+    }
+  });
+</script>
+
+  
 
   <footer>
     <%- include('../partials/footer')%>

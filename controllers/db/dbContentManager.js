@@ -1,39 +1,14 @@
 const db = require("./db");
 const moment = require("moment");
 
-function getLatestCarosel() {
-  return [
-    {
-      url: "./img/hogwards.jpg",
-      title: "Hogwards Legacy",
-      releaseDate: "February 10, 2023",
-    },
-    {
-      url: "./img/atomicHeart.jpg",
-      title: "Atomic Heart",
-      releaseDate: "February 21, 2023",
-    },
-    {
-      url: "./img/forrest.jpg",
-      title: "Son Of The Forest",
-      releaseDate: "February 10, 2023",
-    },
-    {
-      url: "./img/hogwards.jpg",
-      title: "Hogwards Legacy",
-      releaseDate: "February 23, 2023",
-    },
-  ];
-}
-
 async function getPosts() {
   const result = await db.executeMYSQL("SELECT * FROM posts ORDER BY id DESC;");
   return result;
 }
 
-async function getLast3Posts() {
+async function getLast10Posts() {
   const result = await db.executeMYSQL(
-    "SELECT * FROM posts ORDER BY id DESC LIMIT 3;"
+    "SELECT * FROM posts ORDER BY id DESC LIMIT 10;"
   );
   return result;
 }
@@ -43,6 +18,13 @@ async function getPostById(id) {
     await db.executeMYSQL("SELECT * FROM posts WHERE id = ?;", [id])
   )[0];
   return result;
+}
+
+async function getPostTitleById(id) {
+  const result = (
+    await db.executeMYSQL("SELECT title FROM posts WHERE id = ?;", [id])
+  )[0];
+  return result.title;
 }
 
 async function getCommentsForPost(postId) {
@@ -79,11 +61,24 @@ async function addPost(date, title, author, description, imgURL) {
   await db.executeMYSQL("INSERT INTO posts (date, title, author, description, imgURL) VALUES (?, ?, ?, ?, ?);", [date, title, author, description, imgURL])
 }
 
+async function getPostId(date, title, author, description, imgURL) {
+  try {
+    const [rows] = await db.executeMYSQL(
+      "SELECT id FROM posts WHERE date=? AND title=? AND author=? AND description=? AND imgURL=?",
+      [date, title, author, description, imgURL]
+    );
+    return rows.id;
+  } catch (error) {
+    return null;
+  }
+}
+
+
+
 module.exports = {
-  getLatestCarosel,
   getPosts,
   getPostById,
-  getLast3Posts,
+  getLast10Posts,
   getCommentsForPost,
   newComment,
   getAllComments,
@@ -91,5 +86,7 @@ module.exports = {
   removePostById,
   getAllPosts,
   updatePost,
-  addPost
+  addPost,
+  getPostId,
+  getPostTitleById
 };

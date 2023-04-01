@@ -3,6 +3,8 @@ const router = express.Router();
 const mailer = require("../controllers/mailer");
 const validator = require("../controllers/validator");
 const mailDB = require("../controllers/db/dbMails");
+const jwt = require("../controllers/jwt");
+const usersDB = require("../controllers/db/dbUsers");
 
 router.post("/subscribe_for_updates", (req, res) => {
   const { email } = req.body;
@@ -21,6 +23,32 @@ router.get("/cancel", async (req, res) => {
   if (validator.isValidEmail(email)) {
     await mailDB.removeEmailSuscription(email)
   }
+
+  res.redirect("/");
+});
+
+router.get('/unsubscribe', async (req, res) => {
+  const { email } = req.query;
+
+  if (validator.isValidEmail(email)) {
+    await mailDB.removeEmailSuscription(email)
+  }
+
+  res.redirect("/");
+})
+
+router.get("/verify", (req, res) => {
+  const { token } = req.query;
+
+  const payload = jwt.checkToken(token);
+  if (payload === null) {
+    res.redirect("/");
+    return;
+  }
+
+  const { email } = payload;
+
+  usersDB.verifyUserByEmail(email);
 
   res.redirect("/");
 });

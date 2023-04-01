@@ -11,8 +11,7 @@ router.get("/", async (req, res) => {
     user: req.user,
     message: message,
     input: input,
-    carousel: contentManager.getLatestCarosel(),
-    posts: await contentManager.getLast3Posts(),
+    posts: await contentManager.getLast10Posts(),
   });
 });
 
