@@ -7,11 +7,14 @@
             <a href="../">Home</a>
             <a href="../blog">Blog</a>
             <a href="../about">About</a>
+            <% if (user.isAdmin) { %>
+            <a href="/admin">Admin</a>
+            <% } %>
             <!-- <a href="../contact">Contact us</a> -->
         </div>
         <div id="header-navigation-login">
             <% if (user.isLoggedIn) { %>
-                <a href="<%- user.isAdmin ? '/admin' : ''%>">Hi <%- user.username %></a>
+                <a href="">Hi <%- user.username %></a>
                 <a href="../auth/logout">Log Out</a>
             <% } else { %>
                 <a href="../login">Sign in</a>
