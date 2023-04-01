@@ -44,9 +44,18 @@ function isNumeric(value) {
 }
 
 function isValidText(text) {
-    const regex = new RegExp("^[a-zA-Z0-9]{5,16}$")
-    const isValid = regex.test(text)
-    return isValid
+    // Maximum length of text
+    const maxLength = 1000;
+
+    // Ensure text length is within the allowed range
+    if (text.length < 1 || text.length > maxLength) {
+        return false;
+    }
+
+    // Use a regular expression to allow only alphanumeric characters and basic punctuation
+    const regex = new RegExp("^[a-zA-Z0-9,.!?;:()\\s]{1,1000}$");
+    const isValid = regex.test(text);
+    return isValid;
 }
 
 
