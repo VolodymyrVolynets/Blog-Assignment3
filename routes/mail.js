@@ -14,7 +14,7 @@ router.post("/subscribe_for_updates", (req, res) => {
     mailer.subscribeForUpdates(email);
   }
 
-  res.cookie('popup', { text: 'You have been subscribed for updates', isError: false }, { maxAge: 1000 * 60 * 60 * 24 * 7, httpOnly: true, sameSite: true, secure: true })
+  res.cookie('popup', { text: 'You have been subscribed for updates', isError: false }, { maxAge: 1000 * 60 * 60 * 24 * 7 })
 
   res.redirect("/");
 });
@@ -36,7 +36,7 @@ router.get('/unsubscribe', async (req, res) => {
     await mailDB.removeEmailSuscription(email)
   }
 
-  res.cookie('popup', { text: 'You have been unsubscribed from updates', isError: false }, { maxAge: 1000 * 60 * 60 * 24 * 7, httpOnly: true, sameSite: true, secure: true })
+  res.cookie('popup', { text: 'You have been unsubscribed from updates', isError: false }, { maxAge: 1000 * 60 * 60 * 24 * 7 })
 
   res.redirect("/");
 })
@@ -46,17 +46,16 @@ router.get("/verify", (req, res) => {
 
   const payload = jwt.checkToken(token);
   if (payload === null) {
+    console.log(1)
     res.redirect("/");
     return;
   }
-
   const { email } = payload;
-
   usersDB.verifyUserByEmail(email);
 
-  res.cookie('popup', { text: 'Your email has been verified', isError: false }, { maxAge: 1000 * 60 * 60 * 24 * 7, httpOnly: true, sameSite: true, secure: true })
+  res.cookie('popup', { text: 'Your email has been verified', isError: false }, { maxAge: 1000 * 60 * 60 * 24 * 7 })
 
-  res.redirect("/");
+  return res.redirect("/");
 });
 
 // router.get("/test", async (req, res) => {

@@ -79,7 +79,13 @@ async function isAdminByUsername(username) {
     } catch (err) {
       return false
     }
-  }
+}
+
+async function getEmailByUsername(username) {
+    const user = (await db.executeMYSQL("SELECT * FROM users WHERE username = ?", [username]))[0]
+    return user["email"]
+}
+
 async function isVerifiedByUsername(username) {
   try {
     const user = (await db.executeMYSQL("SELECT * FROM users WHERE username = ?", [username]))[0]
@@ -120,5 +126,6 @@ module.exports = {
   getUsernameByEmail,
   isVerifiedById,
   makeVerifiedUserById,
-  removeVerifiedUserById
+  removeVerifiedUserById,
+  getEmailByUsername
 }

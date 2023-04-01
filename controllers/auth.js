@@ -100,10 +100,13 @@ exports.login = async (req, res) => {
     const isVerified = await usersDB.isVerifiedByUsername(username)
    
     if (!isVerified) {
+      const email = await usersDB.getEmailByUsername(username)
+      mailer.verifyEmail(email, username)
       return res.render("pages/login", {
         user: req.user,
         message: validator.genMessageDataJSON("Email not verified", true),
         input: inputData,
+        popup: {text: "Verification email was sent!", isError: false}
       });
     }
     //if password incorect try again
