@@ -83,3 +83,19 @@ exports.verifyEmail = async (email, username) => {
     html: html
 })
 }
+
+exports.resetPassword = async (email, token) => {
+  const htmlPath = path.join(__dirname, "../views/emails/reset_password.ejs")
+  const emailTemplate = fs.readFileSync(htmlPath, 'utf8');
+  const compiledEmailTemplate = ejs.compile(emailTemplate);
+  const resetURL = `${process.env.URL}/auth/reset_password?token=${token}`
+  const html = compiledEmailTemplate({ resetURL: resetURL });
+
+  await transporter.sendMail({
+    from: '"Assignment3 Volodymyr Volynets" <assignment3volodymyrvolynets@gmail.com>', // sender address
+    to: email, // list of receivers
+    subject: "Reset Password", // Subject line
+    text: "Reset Password", // plain text body
+    html: html
+})
+}

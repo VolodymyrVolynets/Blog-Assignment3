@@ -14,7 +14,9 @@ router.post("/subscribe_for_updates", (req, res) => {
     mailer.subscribeForUpdates(email);
   }
 
-  res.redirect("back");
+  res.cookie('popup', { text: 'You have been subscribed for updates', isError: false }, { maxAge: 1000 * 60 * 60 * 24 * 7, httpOnly: true, sameSite: true, secure: true })
+
+  res.redirect("/");
 });
 
 router.get("/cancel", async (req, res) => {
@@ -34,6 +36,8 @@ router.get('/unsubscribe', async (req, res) => {
     await mailDB.removeEmailSuscription(email)
   }
 
+  res.cookie('popup', { text: 'You have been unsubscribed from updates', isError: false }, { maxAge: 1000 * 60 * 60 * 24 * 7, httpOnly: true, sameSite: true, secure: true })
+
   res.redirect("/");
 })
 
@@ -49,6 +53,8 @@ router.get("/verify", (req, res) => {
   const { email } = payload;
 
   usersDB.verifyUserByEmail(email);
+
+  res.cookie('popup', { text: 'Your email has been verified', isError: false }, { maxAge: 1000 * 60 * 60 * 24 * 7, httpOnly: true, sameSite: true, secure: true })
 
   res.redirect("/");
 });

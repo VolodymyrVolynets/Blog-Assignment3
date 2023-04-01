@@ -1,79 +1,71 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/stylesheet/header.css">
-    <link rel="stylesheet" href="/stylesheet/body.css">
-    <%- include('../partials/bootstrapStyle.ejs')%>
-    <title>Game Blog Login</title>
-    <link rel="icon" type="image/x-icon" href="/img/icon.ico">
-</head>
-<body>
-    <header>
-        <%- include('../partials/header')%>
-    </header>
-    <div class="content body-content">
-        <div class="card">
-            <div class="card-body">
-                <form action="/auth/login" method="POST">
-                    <div class="mb-3">
-                      <label for="username" class="form-label">Username</label>
-                      <input type="text" class="form-control" id="username" name="username"
-                        <% if (typeof input != "undefined") {  %>
+<%- include('../partials/head')%>
+
+    <body>
+        <header>
+            <%- include('../partials/header')%>
+        </header>
+        <div class="content body-content">
+            <div class="card">
+                <div class="card-body">
+                    <form action="/auth/login" method="POST">
+                        <div class="mb-3">
+                            <label for="username" class="form-label">Username</label>
+                            <input type="text" class="form-control" id="username" name="username" <% if (typeof input
+                                !="undefined" ) { %>
                             value = "<%- input.username %>"
-                        <% } %>
-                      >
-                      <div class="invalid-feedback">Username must be 5-16 characters long and can only contain letters and numbers.</div>
-                      <div class="valid-feedback">Looks good!</div>
-                    </div>
-                    <div class="mb-3">
-                      <label for="password" class="form-label">Password</label>
-                      <input type="password" class="form-control" id="password" name="password">
-                      <div class="invalid-feedback">Password must be 5-16 characters long and can only contain letters and numbers.</div>
-                      <div class="valid-feedback">Looks good!</div>
-                    </div>
-                    <button type="submit" class="btn btn-primary" disabled>Login</button>
-                  </form>
+                                <% } %>
+                                    >
+                                    <div class="invalid-feedback">Username must be 5-16 characters long and can only
+                                        contain letters and numbers.</div>
+                                    <div class="valid-feedback">Looks good!</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="password" name="password">
+                            <div class="invalid-feedback">Password must be 5-16 characters long and can only contain
+                                letters and numbers.</div>
+                            <div class="valid-feedback">Looks good!</div>
+                        </div>
+                        <button type="submit" class="btn btn-primary" disabled>Login</button>
+                        <a href="/auth/forgot_password" class="btn btn-link">Forgot password?</a>
+                    </form>
+                </div>
             </div>
+            <%- include('../partials/alert')%>
         </div>
-        <%- include('../partials/alert')%>
-    </div>
 
-    <footer>
         <%- include('../partials/footer')%>
-    </footer>
 
-    <script>
-        const usernameInput = document.getElementById('username');
-        const passwordInput = document.getElementById('password');
-        const submitButton = document.querySelector('button[type="submit"]');
+            <script>
+                const usernameInput = document.getElementById('username');
+                const passwordInput = document.getElementById('password');
+                const submitButton = document.querySelector('button[type="submit"]');
 
-        const pattern = /^[a-zA-Z0-9]{5,16}$/;
+                const pattern = /^[a-zA-Z0-9]{5,16}$/;
 
-        function validateInput(input, pattern) {
-            return pattern.test(input.value);
-        }
+                function validateInput(input, pattern) {
+                    return pattern.test(input.value);
+                }
 
-        function checkInputs() {
-            const isUsernameValid = validateInput(usernameInput, pattern);
-            const isPasswordValid = validateInput(passwordInput, pattern);
+                function checkInputs() {
+                    const isUsernameValid = validateInput(usernameInput, pattern);
+                    const isPasswordValid = validateInput(passwordInput, pattern);
 
-            usernameInput.classList.toggle('is-valid', isUsernameValid);
-            usernameInput.classList.toggle('is-invalid', !isUsernameValid);
+                    usernameInput.classList.toggle('is-valid', isUsernameValid);
+                    usernameInput.classList.toggle('is-invalid', !isUsernameValid);
 
-            passwordInput.classList.toggle('is-valid', isPasswordValid);
-            passwordInput.classList.toggle('is-invalid', !isPasswordValid);
+                    passwordInput.classList.toggle('is-valid', isPasswordValid);
+                    passwordInput.classList.toggle('is-invalid', !isPasswordValid);
 
-            submitButton.disabled = !(isUsernameValid && isPasswordValid);
-        }
+                    submitButton.disabled = !(isUsernameValid && isPasswordValid);
+                }
 
-        usernameInput.addEventListener('input', checkInputs);
-        passwordInput.addEventListener('input', checkInputs);
+                usernameInput.addEventListener('input', checkInputs);
+                passwordInput.addEventListener('input', checkInputs);
 
-    </script>
+            </script>
+    </body>
 
-    <%- include('../partials/bootstrapJS.ejs')%>
-</body>
 </html>

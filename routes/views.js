@@ -12,6 +12,7 @@ router.get("/", async (req, res) => {
     message: message,
     input: input,
     posts: await contentManager.getLast10Posts(),
+    popup: req.popup,
   });
 });
 
@@ -26,6 +27,7 @@ router.get("/registration", (req, res) => {
     user: req.user,
     message: message,
     input: input,
+    popup: req.popup,
   });
 });
 
@@ -35,6 +37,7 @@ router.get("/login", (req, res) => {
   res.render("pages/login", {
     user: req.user,
     input: input,
+    popup: req.popup,
   });
 });
 
@@ -42,12 +45,14 @@ router.get("/blog", async (req, res) => {
   res.render("pages/blog", {
     user: req.user,
     posts: await contentManager.getPosts(),
+    popup: req.popup,
   });
 });
 
 router.get("/about", async (req, res) => {
   res.render("pages/about", {
-    user: req.user
+    user: req.user,
+    popup: req.popup,
   });
 });
 

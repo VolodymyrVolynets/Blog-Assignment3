@@ -1,113 +1,100 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/stylesheet/header.css">
-    <link rel="stylesheet" href="/stylesheet/body.css">
-    <%- include('../../partials/bootstrapStyle.ejs')%>
-    <title>Game Blog Admin</title>
-    <link rel="icon" type="image/x-icon" href="/img/icon.ico">
-</head>
+<%- include('../../partials/head')%>
 
-<body>
-    <header>
-        <%- include('../../partials/header')%>
-    </header>
-    <div class="content body-content">
+    <body>
+        <header>
+            <%- include('../../partials/header')%>
+        </header>
+        <div class="content body-content">
 
-        <a class="btn btn-primary" href="/admin/" role="button">Back</a>
+            <a class="btn btn-primary" href="/admin/" role="button">Back</a>
 
-        <div class="mb-3">
-            <input type="text" class="form-control mt-3" id="searchInput" placeholder="Search">
-        </div>
+            <div class="mb-3">
+                <input type="text" class="form-control mt-3" id="searchInput" placeholder="Search">
+            </div>
 
-        <div class="form-check mb-3">
-            <input class="form-check-input" type="checkbox" id="new-comments-only">
-            <label class="form-check-label" for="new-comments-only">
-                Display only new comments (less than 24h)
-            </label>
-        </div>
+            <div class="form-check mb-3">
+                <input class="form-check-input" type="checkbox" id="new-comments-only">
+                <label class="form-check-label" for="new-comments-only">
+                    Display only new comments (less than 24h)
+                </label>
+            </div>
 
-        <table class="table">
-            <thead>
-                <tr>
-                    <th scope="col">ID</th>
-                    <th scope="col">Username</th>
-                    <th scope="col">Date</th>
-                    <th scope="col">Comment</th>
-                    <th scope="col">Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                <% for(var i=0; i < comments.length; i++) { %>
+            <table class="table">
+                <thead>
                     <tr>
-                        <th scope="row"><%- comments[i].id%></th>
-                        <td><%- comments[i].username%></td>
-                        <td><%- comments[i].date%></td>
-                        <td><%- comments[i].comment%></td>
-                        <td><a href="/admin/comments/remove?id=<%- comments[i].id%>">remove</a></td>
+                        <th scope="col">ID</th>
+                        <th scope="col">Username</th>
+                        <th scope="col">Date</th>
+                        <th scope="col">Comment</th>
+                        <th scope="col">Action</th>
                     </tr>
-                    <% } %>
-            </tbody>
-        </table>
-    </div>
+                </thead>
+                <tbody>
+                    <% for(var i=0; i < comments.length; i++) { %>
+                        <tr>
+                            <th scope="row"><%- comments[i].id%></th>
+                            <td><%- comments[i].username%></td>
+                            <td><%- comments[i].date%></td>
+                            <td><%- comments[i].comment%></td>
+                            <td><a href="/admin/comments/remove?id=<%- comments[i].id%>">remove</a></td>
+                        </tr>
+                        <% } %>
+                </tbody>
+            </table>
+        </div>
 
-    <footer>
         <%- include('../../partials/footer')%>
-    </footer>
 
-    <%- include('../../partials/bootstrapJS.ejs')%>
+            <script>
+                function parseDate(input) {
+                    var parts = input.match(/(\d+)/g);
+                    return new Date(parts[0], parts[1] - 1, parts[2]); // Note: months are 0-based
+                }
 
-        <script>
-            function parseDate(input) {
-                var parts = input.match(/(\d+)/g);
-                return new Date(parts[0], parts[1] - 1, parts[2]); // Note: months are 0-based
-            }
+                function filterComments() {
+                    const inputText = searchInput.value.toLowerCase().trim();
+                    const tableRows = document.getElementsByTagName("tbody")[0].getElementsByTagName("tr");
+                    const onlyNew = document.getElementById("new-comments-only").checked;
+                    const filterDate = new Date();
+                    filterDate.setDate(filterDate.getDate() - 1);
 
-            function filterComments() {
-                const inputText = searchInput.value.toLowerCase().trim();
-                const tableRows = document.getElementsByTagName("tbody")[0].getElementsByTagName("tr");
-                const onlyNew = document.getElementById("new-comments-only").checked;
-                const filterDate = new Date();
-                filterDate.setDate(filterDate.getDate() - 1);
+                    for (let i = 0; i < tableRows.length; i++) {
+                        const tableData = tableRows[i].getElementsByTagName("td");
+                        const commentDate = parseDate(tableData[1].textContent.trim());
+                        let foundMatch = false;
 
-                for (let i = 0; i < tableRows.length; i++) {
-                    const tableData = tableRows[i].getElementsByTagName("td");
-                    const commentDate = parseDate(tableData[1].textContent.trim());
-                    let foundMatch = false;
+                        if (onlyNew && commentDate < filterDate) {
+                            tableRows[i].style.display = "none";
+                            continue;
+                        }
 
-                    if (onlyNew && commentDate < filterDate) {
-                        tableRows[i].style.display = "none";
-                        continue;
-                    }
+                        for (let j = 0; j < tableData.length; j++) {
+                            const cellData = tableData[j].innerHTML.toLowerCase().trim();
 
-                    for (let j = 0; j < tableData.length; j++) {
-                        const cellData = tableData[j].innerHTML.toLowerCase().trim();
+                            if (cellData.includes(inputText)) {
+                                foundMatch = true;
+                                break;
+                            }
+                        }
 
-                        if (cellData.includes(inputText)) {
-                            foundMatch = true;
-                            break;
+                        if (foundMatch) {
+                            tableRows[i].style.display = "";
+                        } else {
+                            tableRows[i].style.display = "none";
                         }
                     }
-
-                    if (foundMatch) {
-                        tableRows[i].style.display = "";
-                    } else {
-                        tableRows[i].style.display = "none";
-                    }
                 }
-            }
 
-            const searchInput = document.getElementById("searchInput");
-            searchInput.addEventListener("keyup", filterComments);
+                const searchInput = document.getElementById("searchInput");
+                searchInput.addEventListener("keyup", filterComments);
 
-            const newCommentsCheckbox = document.getElementById("new-comments-only");
-            newCommentsCheckbox.addEventListener("change", filterComments);
-        </script>
+                const newCommentsCheckbox = document.getElementById("new-comments-only");
+                newCommentsCheckbox.addEventListener("change", filterComments);
+            </script>
 
-</body>
+    </body>
 
 </html>

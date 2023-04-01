@@ -1,124 +1,114 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/stylesheet/header.css">
-    <link rel="stylesheet" href="/stylesheet/body.css">
-    <%- include('../partials/bootstrapStyle.ejs')%>
-        <title>Game Blog Registration</title>
-        <link rel="icon" type="image/x-icon" href="/img/icon.ico">
-</head>
+<%- include('../partials/head')%>
 
-<body>
-    <header>
-        <%- include('../partials/header')%>
-    </header>
-    <div class="content body-content">
-        <div class="card">
-            <div class="card-body">
-                <form action="/auth/registration" method="POST">
-                    <div class="mb-3">
-                        <label for="username" class="form-label">Username</label>
-                        <input type="text" class="form-control" id="username" name="username" <% if (typeof input
-                        !="undefined" ) { %>
-                        value = "<%- input.username %>"
-                        <% } %>>
-                        <div class="invalid-feedback">Invalid username. Please use 5-16 alphanumeric characters.</div>
-                        <div class="valid-feedback">Valid username.</div>
-                    </div>
-                    <div class="mb-3">
-                        <label for="email" class="form-label">Email address</label>
-                        <input type="email" class="form-control" id="email" name="email" <% if (typeof input
-                        !="undefined" ) { %>
-                        value = "<%- input.email %>"
-                        <% } %>>
-                        <div class="invalid-feedback">Please enter a valid email address.</div>
-                        <div class="valid-feedback">Valid email address.</div>
-                    </div>
-                    <div class="mb-3">
-                        <label for="name" class="form-label">Name</label>
-                        <input type="text" class="form-control" id="name" name="name" <% if (typeof input
-                        !="undefined" ) { %>
-                        value = "<%- input.name %>"
-                        <% } %>>
-                        <div class="invalid-feedback">Please enter a valid name.</div>
-                        <div class="valid-feedback">Valid name.</div>
-                    </div>
-                    <div class="mb-3">
-                        <label for="password" class="form-label">Password</label>
-                        <input type="password" class="form-control" id="password" name="password">
-                        <div class="invalid-feedback">Invalid password. Please use 5-16 alphanumeric characters.</div>
-                        <div class="valid-feedback">Valid password.</div>
-                    </div>
-                    <div class="mb-3">
-                        <label for="confirmPassword" class="form-label">Confirm Password</label>
-                        <input type="password" class="form-control" id="confirmPassword" name="confirmPassword">
-                        <div class="invalid-feedback">Passwords do not match.</div>
-                        <div class="valid-feedback">Passwords match.</div>
-                    </div>
-                    <button type="submit" class="btn btn-primary" disabled>Register</button>
-                </form>
+    <body>
+        <header>
+            <%- include('../partials/header')%>
+        </header>
+        <div class="content body-content">
+            <div class="card">
+                <div class="card-body">
+                    <form action="/auth/registration" method="POST">
+                        <div class="mb-3">
+                            <label for="username" class="form-label">Username</label>
+                            <input type="text" class="form-control" id="username" name="username" <% if (typeof input
+                                !="undefined" ) { %>
+                            value = "<%- input.username %>"
+                                <% } %>>
+                                    <div class="invalid-feedback">Invalid username. Please use 5-16 alphanumeric
+                                        characters.</div>
+                                    <div class="valid-feedback">Valid username.</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email address</label>
+                            <input type="email" class="form-control" id="email" name="email" <% if (typeof input
+                                !="undefined" ) { %>
+                            value = "<%- input.email %>"
+                                <% } %>>
+                                    <div class="invalid-feedback">Please enter a valid email address.</div>
+                                    <div class="valid-feedback">Valid email address.</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Name</label>
+                            <input type="text" class="form-control" id="name" name="name" <% if (typeof input
+                                !="undefined" ) { %>
+                            value = "<%- input.name %>"
+                                <% } %>>
+                                    <div class="invalid-feedback">Please enter a valid name.</div>
+                                    <div class="valid-feedback">Valid name.</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="password" name="password">
+                            <div class="invalid-feedback">Invalid password. Please use 5-16 alphanumeric characters.
+                            </div>
+                            <div class="valid-feedback">Valid password.</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="confirmPassword" class="form-label">Confirm Password</label>
+                            <input type="password" class="form-control" id="confirmPassword" name="confirmPassword">
+                            <div class="invalid-feedback">Passwords do not match.</div>
+                            <div class="valid-feedback">Passwords match.</div>
+                        </div>
+                        <button type="submit" class="btn btn-primary" disabled>Register</button>
+                    </form>
+                </div>
             </div>
+            <%- include('../partials/alert')%>
         </div>
-        <%- include('../partials/alert')%>
-    </div>
 
-    <footer>
         <%- include('../partials/footer')%>
-    </footer>
 
-    <%- include('../partials/bootstrapJS.ejs')%>
+            <script>
+                const usernameInput = document.getElementById('username');
+                const passwordInput = document.getElementById('password');
+                const confirmPasswordInput = document.getElementById('confirmPassword');
+                const nameInput = document.getElementById('name');
+                const emailInput = document.getElementById('email');
+                const submitButton = document.querySelector('button[type="submit"]');
 
-        <script>
-            const usernameInput = document.getElementById('username');
-            const passwordInput = document.getElementById('password');
-            const confirmPasswordInput = document.getElementById('confirmPassword');
-            const nameInput = document.getElementById('name');
-            const emailInput = document.getElementById('email');
-            const submitButton = document.querySelector('button[type="submit"]');
+                const usernamePattern = /^[a-zA-Z0-9]{5,16}$/;
+                const passwordPattern = /^[a-zA-Z0-9]{5,16}$/;
+                const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                const namePattern = /^[a-zA-Z\s]{1,50}$/;
 
-            const         usernamePattern = /^[a-zA-Z0-9]{5,16}$/;
-        const passwordPattern = /^[a-zA-Z0-9]{5,16}$/;
-        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        const namePattern = /^[a-zA-Z\s]{1,50}$/;
+                function validateInput(input, pattern) {
+                    return pattern.test(input.value);
+                }
 
-        function validateInput(input, pattern) {
-            return pattern.test(input.value);
-        }
+                function checkInputs() {
+                    const isUsernameValid = validateInput(usernameInput, usernamePattern);
+                    const isPasswordValid = validateInput(passwordInput, passwordPattern);
+                    const isConfirmPasswordValid = passwordInput.value === confirmPasswordInput.value;
+                    const isEmailValid = validateInput(emailInput, emailPattern);
+                    const isNameValid = validateInput(nameInput, namePattern);
 
-        function checkInputs() {
-            const isUsernameValid = validateInput(usernameInput, usernamePattern);
-            const isPasswordValid = validateInput(passwordInput, passwordPattern);
-            const isConfirmPasswordValid = passwordInput.value === confirmPasswordInput.value;
-            const isEmailValid = validateInput(emailInput, emailPattern);
-            const isNameValid = validateInput(nameInput, namePattern);
+                    usernameInput.classList.toggle('is-valid', isUsernameValid);
+                    usernameInput.classList.toggle('is-invalid', !isUsernameValid);
 
-            usernameInput.classList.toggle('is-valid', isUsernameValid);
-            usernameInput.classList.toggle('is-invalid', !isUsernameValid);
+                    passwordInput.classList.toggle('is-valid', isPasswordValid);
+                    passwordInput.classList.toggle('is-invalid', !isPasswordValid);
 
-            passwordInput.classList.toggle('is-valid', isPasswordValid);
-            passwordInput.classList.toggle('is-invalid', !isPasswordValid);
+                    confirmPasswordInput.classList.toggle('is-valid', isConfirmPasswordValid);
+                    confirmPasswordInput.classList.toggle('is-invalid', !isConfirmPasswordValid);
 
-            confirmPasswordInput.classList.toggle('is-valid', isConfirmPasswordValid);
-            confirmPasswordInput.classList.toggle('is-invalid', !isConfirmPasswordValid);
+                    emailInput.classList.toggle('is-valid', isEmailValid);
+                    emailInput.classList.toggle('is-invalid', !isEmailValid);
 
-            emailInput.classList.toggle('is-valid', isEmailValid);
-            emailInput.classList.toggle('is-invalid', !isEmailValid);
+                    nameInput.classList.toggle('is-valid', isNameValid);
+                    nameInput.classList.toggle('is-invalid', !isNameValid);
 
-            nameInput.classList.toggle('is-valid', isNameValid);
-            nameInput.classList.toggle('is-invalid', !isNameValid);
+                    submitButton.disabled = !(isUsernameValid && isPasswordValid && isConfirmPasswordValid && isEmailValid && isNameValid);
+                }
 
-            submitButton.disabled = !(isUsernameValid && isPasswordValid && isConfirmPasswordValid && isEmailValid && isNameValid);
-        }
+                usernameInput.addEventListener('input', checkInputs);
+                passwordInput.addEventListener('input', checkInputs);
+                confirmPasswordInput.addEventListener('input', checkInputs);
+                emailInput.addEventListener('input', checkInputs);
+                nameInput.addEventListener('input', checkInputs);
+            </script>
+    </body>
 
-        usernameInput.addEventListener('input', checkInputs);
-        passwordInput.addEventListener('input', checkInputs);
-        confirmPasswordInput.addEventListener('input', checkInputs);
-        emailInput.addEventListener('input', checkInputs);
-        nameInput.addEventListener('input', checkInputs);
-    </script>
-</body>
 </html>>

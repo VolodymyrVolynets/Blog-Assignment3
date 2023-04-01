@@ -1,158 +1,147 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="/stylesheet/header.css">
-  <link rel="stylesheet" href="/stylesheet/body.css">
-  <%- include('../partials/bootstrapStyle.ejs')%>
-  <title>Game Blog Post</title>
-  <link rel="icon" type="image/x-icon" href="/img/icon.ico">
-</head>
+<%- include('../partials/head')%>
 
-<body>
-  <header>
-    <%- include('../partials/header')%>
-  </header>
-  <div class="content body-content">
+  <body>
+    <header>
+      <%- include('../partials/header')%>
+    </header>
+    <div class="content body-content">
 
 
-    <div class="flex flex-wrap vertical" style="width: 100%">
-      <% if(typeof(post) !="undefined" ) { %>
-        <h1><%- post.title%></h1>
-        <h5>Published by <%- post.author%> on <%-post.date%></h5>
-        <img src="<%- post.imgURL%>" alt="" style="width: 100%">
-        <p><%-post.description%></p>
-        <% } %>
-    </div>
+      <div class="flex flex-wrap vertical" style="width: 100%">
+        <% if(typeof(post) !="undefined" ) { %>
+          <h1><%- post.title%></h1>
+          <h5>Published by <%- post.author%> on <%-post.date%></h5>
+          <img src="<%- post.imgURL%>" alt="" style="width: 100%">
+          <p><%-post.description%></p>
+          <% } %>
+      </div>
 
-    <% if (typeof(comments) != 'undefined' && comments.length >= 1) { %>
+      <% if (typeof(comments) !='undefined' && comments.length>= 1) { %>
 
-      <% for ( var i = 0; i < comments.length; i++) { %>
-        <% if(i == 0) { %>
-          <div class="col-md-12 col-lg-10" style="width: 100%;">
-            <div class="card text-dark">
-              <div class="card-body p-4">
-                <h4 class="mb-0">Recent comments</h4>
-                <p class="fw-light mb-4 pb-2">Latest Comments section by users</p>
-      
-                <div class="d-flex flex-start">
-                  <img class="rounded-circle shadow-1-strong me-3" src="./img/user.png" alt="avatar" width="60" height="60" />
-                  <div>
-                    <h6 class="fw-bold mb-1"><%- comments[i].username%></h6>
-                    <div class="d-flex align-items-center mb-3">
+        <% for ( var i=0; i < comments.length; i++) { %>
+          <% if(i==0) { %>
+            <div class="col-md-12 col-lg-10" style="width: 100%;">
+              <div class="card text-dark">
+                <div class="card-body p-4">
+                  <h4 class="mb-0">Recent comments</h4>
+                  <p class="fw-light mb-4 pb-2">Latest Comments section by users</p>
+
+                  <div class="d-flex flex-start">
+                    <img class="rounded-circle shadow-1-strong me-3" src="./img/user.png" alt="avatar" width="60"
+                      height="60" />
+                    <div>
+                      <h6 class="fw-bold mb-1"><%- comments[i].username%></h6>
+                      <div class="d-flex align-items-center mb-3">
+                        <p class="mb-0">
+                          <%- comments[i].date%>
+
+                        </p>
+                        <a href="#!" class="link-muted"><i class="fas fa-pencil-alt ms-2"></i></a>
+                        <a href="#!" class="link-muted"><i class="fas fa-redo-alt ms-2"></i></a>
+                        <a href="#!" class="link-muted"><i class="fas fa-heart ms-2"></i></a>
+                      </div>
                       <p class="mb-0">
-                        <%- comments[i].date%>
-      
+                        <%- comments[i].comment%>
                       </p>
-                      <a href="#!" class="link-muted"><i class="fas fa-pencil-alt ms-2"></i></a>
-                      <a href="#!" class="link-muted"><i class="fas fa-redo-alt ms-2"></i></a>
-                      <a href="#!" class="link-muted"><i class="fas fa-heart ms-2"></i></a>
                     </div>
-                    <p class="mb-0">
-                      <%- comments[i].comment%>
-                    </p>
                   </div>
                 </div>
-              </div>
-          <% } else { %>
+                <% } else { %>
 
-            <hr class="my-0" />
-  
-            <div class="card-body p-4">
-              <div class="d-flex flex-start">
-                <img class="rounded-circle shadow-1-strong me-3"
-                  src="./img/user.png" alt="avatar" width="60" height="60" />
-                <div>
-                  <h6 class="fw-bold mb-1"><%- comments[i].username%></h6>
-                  <div class="d-flex align-items-center mb-3">
-                    <p class="mb-0">
-                      <%- comments[i].date%>
-                    </p>
-                    <a href="#!" class="link-muted"><i class="fas fa-pencil-alt ms-2"></i></a>
-                    <a href="#!" class="text-success"><i class="fas fa-redo-alt ms-2"></i></a>
-                    <a href="#!" class="link-danger"><i class="fas fa-heart ms-2"></i></a>
+                  <hr class="my-0" />
+
+                  <div class="card-body p-4">
+                    <div class="d-flex flex-start">
+                      <img class="rounded-circle shadow-1-strong me-3" src="./img/user.png" alt="avatar" width="60"
+                        height="60" />
+                      <div>
+                        <h6 class="fw-bold mb-1"><%- comments[i].username%></h6>
+                        <div class="d-flex align-items-center mb-3">
+                          <p class="mb-0">
+                            <%- comments[i].date%>
+                          </p>
+                          <a href="#!" class="link-muted"><i class="fas fa-pencil-alt ms-2"></i></a>
+                          <a href="#!" class="text-success"><i class="fas fa-redo-alt ms-2"></i></a>
+                          <a href="#!" class="link-danger"><i class="fas fa-heart ms-2"></i></a>
+                        </div>
+                        <p class="mb-0">
+                          <%- comments[i].comment%>
+                        </p>
+                      </div>
+                    </div>
                   </div>
-                  <p class="mb-0">
-                    <%- comments[i].comment%>
-                  </p>
-                </div>
+
+                  <% } %>
+
+
+                    <% } %>
               </div>
             </div>
-            
             <% } %>
-            
-
-        <% } %>
-          </div>
-          </div>
-    <% } %>
 
 
-    <% if(user.isLoggedIn) { %>
+              <% if(user.isLoggedIn) { %>
 
-    <div class="bg-light p-2">
-      <form action="./post/" method="POST">
-        <input type="hidden" name="id" value="<%-post.id%>">
-      <div class="d-flex flex-row align-items-start"><img class="rounded-circle" src="./img/user.png" width="40">
-        <textarea class="form-control ml-1 shadow-none textarea" name="text"></textarea>
-      </div>
-      <div class="mt-2 text-right">
-        <button class="btn btn-primary btn-sm shadow-none" type="submit" style="background-color: #FFA400;">Post comment</button>
-      </div>
-    </form>
-  </div>
-  <% } %>
+                <div class="bg-light p-2">
+                  <form action="./post/" method="POST">
+                    <input type="hidden" name="id" value="<%-post.id%>">
+                    <div class="d-flex flex-row align-items-start"><img class="rounded-circle" src="./img/user.png"
+                        width="40">
+                      <textarea class="form-control ml-1 shadow-none textarea" name="text"></textarea>
+                    </div>
+                    <div class="mt-2 text-right">
+                      <button class="btn btn-primary btn-sm shadow-none" type="submit"
+                        style="background-color: #FFA400;">Post comment</button>
+                    </div>
+                  </form>
+                </div>
+                <% } %>
 
+    </div>
 
-
-
-  </div>
-
-  <footer>
     <%- include('../partials/footer')%>
-  </footer>
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      const textArea = document.querySelector('.textarea');
-      const submitButton = document.querySelector('button[type="submit"]');
-      const textRightDiv = textArea.closest('.d-flex').nextElementSibling;
-  
-      const charCount = document.createElement('small');
-      charCount.textContent = '0/1000';
-      charCount.classList.add('text-muted');
-  
-      const errorText = document.createElement('p');
-      errorText.textContent = 'Your comment must not exceed 1000 characters and not contain special characters.';
-      errorText.classList.add('text-danger', 'd-none');
-  
-      textRightDiv.prepend(charCount);
-      textRightDiv.prepend(errorText);
-  
-      function validateComment(text) {
-        const pattern = /^[^`'"\\]*$/;
-        return pattern.test(text) && text.length <= 1000 && text.length > 0;
-      }
-  
-      function checkCommentLength() {
-        const commentLength = textArea.value.length;
-        charCount.textContent = `${commentLength}/1000`;
-  
-        if (!validateComment(textArea.value)) {
-          submitButton.disabled = true;
-          errorText.classList.remove('d-none');
-        } else {
-          submitButton.disabled = false;
-          errorText.classList.add('d-none');
-        }
-      }
-  
-      textArea.addEventListener('input', checkCommentLength);
-    });
-  </script>
-  <%- include('../partials/bootstrapJS.ejs')%>
-</body>
+      <script>
+        document.addEventListener('DOMContentLoaded', function () {
+          const textArea = document.querySelector('.textarea');
+          const submitButton = document.querySelector('button[type="submit"]');
+          const textRightDiv = textArea.closest('.d-flex').nextElementSibling;
+
+          const charCount = document.createElement('small');
+          charCount.textContent = '0/1000';
+          charCount.classList.add('text-muted');
+
+          const errorText = document.createElement('p');
+          errorText.textContent = 'Your comment must not exceed 1000 characters and not contain special characters.';
+          errorText.classList.add('text-danger', 'd-none');
+
+          textRightDiv.prepend(charCount);
+          textRightDiv.prepend(errorText);
+
+          function validateComment(text) {
+            const pattern = /^[^`'"\\]*$/;
+            return pattern.test(text) && text.length <= 1000 && text.length > 0;
+          }
+
+          function checkCommentLength() {
+            const commentLength = textArea.value.length;
+            charCount.textContent = `${commentLength}/1000`;
+
+            if (!validateComment(textArea.value)) {
+              submitButton.disabled = true;
+              errorText.classList.remove('d-none');
+            } else {
+              submitButton.disabled = false;
+              errorText.classList.add('d-none');
+            }
+          }
+
+          textArea.addEventListener('input', checkCommentLength);
+        });
+      </script>
+
+  </body>
 
 </html>

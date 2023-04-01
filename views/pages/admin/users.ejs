@@ -1,90 +1,78 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/stylesheet/header.css">
-    <link rel="stylesheet" href="/stylesheet/body.css">
-    <%- include('../../partials/bootstrapStyle.ejs')%>
-    <title>Game Blog Admin</title>
-    <link rel="icon" type="image/x-icon" href="/img/icon.ico">
-</head>
+<%- include('../../partials/head')%>
 
-<body>
-    <header>
-        <%- include('../../partials/header')%>
-    </header>
-    <div class="content body-content">
+    <body>
+        <header>
+            <%- include('../../partials/header')%>
+        </header>
+        <div class="content body-content">
 
-        <a class="btn btn-primary" href="/admin" role="button">Back</a>
+            <a class="btn btn-primary" href="/admin" role="button">Back</a>
 
-        <div class="mb-3">
-            <input type="text" class="form-control mt-3" id="searchInput" placeholder="Search">
+            <div class="mb-3">
+                <input type="text" class="form-control mt-3" id="searchInput" placeholder="Search">
+            </div>
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Username</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Is Admin</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% for(var i=0; i < users.length; i++) { %>
+                        <tr>
+                            <th scope="row"><%- users[i].id%></th>
+                            <td><%- users[i].username%></td>
+                            <td><%- users[i].name%></td>
+                            <td><%- users[i].email%></td>
+                            <td><a href="/admin/users/toggle_is_admin?id=<%- users[i].id%>"><%-
+                                        users[i].isAdmin==1%></a></td>
+                            <td><a href="/admin/users/remove?id=<%- users[i].id%>">remove</a></td>
+                        </tr>
+                        <% } %>
+                </tbody>
+            </table>
         </div>
 
-        <table class="table">
-            <thead>
-                <tr>
-                    <th scope="col">ID</th>
-                    <th scope="col">Username</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">Email</th>
-                    <th scope="col">Is Admin</th>
-                    <th scope="col">Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                <% for(var i=0; i < users.length; i++) { %>
-                <tr>
-                    <th scope="row"><%- users[i].id%></th>
-                    <td><%- users[i].username%></td>
-                    <td><%- users[i].name%></td>
-                    <td><%- users[i].email%></td>
-                    <td><a href="/admin/users/toggle_is_admin?id=<%- users[i].id%>"><%- users[i].isAdmin == 1%></a></td>
-                    <td><a href="/admin/users/remove?id=<%- users[i].id%>">remove</a></td>
-                </tr>
-                <% } %>
-            </tbody>
-        </table>
-    </div>
-
-    <footer>
         <%- include('../../partials/footer')%>
-    </footer>
 
-    <%- include('../../partials/bootstrapJS.ejs')%>
+            <script>
+                const searchInput = document.getElementById("searchInput");
+                searchInput.addEventListener("keyup", () => {
+                    const inputText = searchInput.value.toLowerCase().trim();
+                    const tableRows = document.getElementsByTagName("tbody")[0].getElementsByTagName("tr");
 
-    <script>
-        const searchInput = document.getElementById("searchInput");
-        searchInput.addEventListener("keyup", () => {
-            const inputText = searchInput.value.toLowerCase().trim();
-            const tableRows = document.getElementsByTagName("tbody")[0].getElementsByTagName("tr");
+                    for (let i = 0; i < tableRows.length; i++) {
+                        const tableData = tableRows[i].getElementsByTagName("td");
 
-            for (let i = 0; i < tableRows.length; i++) {
-                const tableData = tableRows[i].getElementsByTagName("td");
+                        let foundMatch = false;
 
-                let foundMatch = false;
+                        for (let j = 0; j < tableData.length; j++) {
+                            const cellData = tableData[j].innerHTML.toLowerCase().trim();
 
-                for (let j = 0; j < tableData.length; j++) {
-                    const cellData = tableData[j].innerHTML.toLowerCase().trim();
+                            if (cellData.includes(inputText)) {
+                                foundMatch = true;
+                                break;
+                            }
+                        }
 
-                    if (cellData.includes(inputText)) {
-                        foundMatch = true;
-                        break;
+                        if (foundMatch) {
+                            tableRows[i].style.display = "";
+                        } else {
+                            tableRows[i].style.display = "none";
+                        }
                     }
-                }
+                });
+            </script>
 
-                if (foundMatch) {
-                    tableRows[i].style.display = "";
-                } else {
-                    tableRows[i].style.display = "none";
-                }
-            }
-        });
-    </script>
-
-</body>
+    </body>
 
 </html>

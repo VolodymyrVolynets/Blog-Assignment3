@@ -84,6 +84,15 @@ async function isVerifiedByUsername(username) {
   }
 }
 
+async function updatePassword(username, password) {
+    await db.executeMYSQL("UPDATE users SET password = ? WHERE username = ?;", [password, username])
+}
+
+async function getUsernameByEmail(email) {
+  const user = (await db.executeMYSQL("SELECT * from users WHERE BINARY email = ?;", [email]))[0]
+  return user["username"]
+}
+
 module.exports = {
     isUserExist,
     getUser,
@@ -97,5 +106,7 @@ module.exports = {
     isEmailExist,
     isUserIdExistById,
     verifyUserByEmail,
-    isVerifiedByUsername
+    isVerifiedByUsername,
+  updatePassword,
+  getUsernameByEmail
 }

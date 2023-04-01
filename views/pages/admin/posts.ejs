@@ -1,122 +1,110 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="/stylesheet/header.css">
-  <link rel="stylesheet" href="/stylesheet/body.css">
-  <%- include('../../partials/bootstrapStyle.ejs')%>
-  <title>Game Blog Admin</title>
-  <link rel="icon" type="image/x-icon" href="/img/icon.ico">
-</head>
+<%- include('../../partials/head')%>
 
-<body>
-  <header>
-    <%- include('../../partials/header')%>
-  </header>
-  <div class="content body-content">
-    <div class="form-check">
-      <input class="form-check-input" type="checkbox" id="new-posts-only">
-      <label class="form-check-label" for="new-posts-only">
-        Display only new posts
-      </label>
-    </div>
-    <form>
-      <div class="form-group">
-        <input type="text" class="form-control" id="search-input" placeholder="Search">
+  <body>
+    <header>
+      <%- include('../../partials/header')%>
+    </header>
+    <div class="content body-content">
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" id="new-posts-only">
+        <label class="form-check-label" for="new-posts-only">
+          Display only new posts
+        </label>
       </div>
-    </form>
-    <a class="btn btn-primary" href="/admin" role="button">Back</a>
-    <a class="btn btn-primary" href="/admin/posts/new" role="button">Add New</a>
+      <form>
+        <div class="form-group">
+          <input type="text" class="form-control" id="search-input" placeholder="Search">
+        </div>
+      </form>
+      <a class="btn btn-primary" href="/admin" role="button">Back</a>
+      <a class="btn btn-primary" href="/admin/posts/new" role="button">Add New</a>
 
-    <table class="table">
-      <thead>
-        <tr>
-          <th scope="col">ID</th>
-          <th scope="col">Title</th>
-          <th scope="col">Author</th>
-          <th scope="col">Date</th>
-          <th scope="col">Description</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% for(var i=0; i < posts.length; i++) { %>
+      <table class="table">
+        <thead>
           <tr>
-            <th scope="row"><%- posts[i].id%></th>
-            <td><%- posts[i].title%></td>
-            <td><%- posts[i].author%></td>
-            <td><%- posts[i].date%></td>
-            <td><%- posts[i].description%></td>
-            <td><a href="/admin/posts/remove?id=<%- posts[i].id%>">remove</a></td>
-            <td><a href="/admin/posts/edit?id=<%- posts[i].id%>">edit</a></td>
+            <th scope="col">ID</th>
+            <th scope="col">Title</th>
+            <th scope="col">Author</th>
+            <th scope="col">Date</th>
+            <th scope="col">Description</th>
           </tr>
-        <% } %>
-      </tbody>
-    </table>
-  </div>
+        </thead>
+        <tbody>
+          <% for(var i=0; i < posts.length; i++) { %>
+            <tr>
+              <th scope="row"><%- posts[i].id%></th>
+              <td><%- posts[i].title%></td>
+              <td><%- posts[i].author%></td>
+              <td><%- posts[i].date%></td>
+              <td><%- posts[i].description%></td>
+              <td><a href="/admin/posts/remove?id=<%- posts[i].id%>">remove</a></td>
+              <td><a href="/admin/posts/edit?id=<%- posts[i].id%>">edit</a></td>
+            </tr>
+            <% } %>
+        </tbody>
+      </table>
+    </div>
 
-  <footer>
     <%- include('../../partials/footer')%>
-  </footer>
 
-  <%- include('../../partials/bootstrapJS.ejs')%>
-  <script>
-    var input = document.getElementById("search-input");
-    input.addEventListener("keyup", function() {
-      var filter = input.value.toLowerCase();
-      var rows = document.getElementsByTagName("tr");
-      for (var i = 0; i < rows.length; i++) {
-        var cells = rows[i].getElementsByTagName("td");
-        var visible = false;
-        for (var j = 0; j < cells.length; j++) {
-          var cellText = cells[j].textContent.toLowerCase();
-          if (cellText.indexOf(filter) > -1) {
-            visible = true;
-            break;
+      <script>
+        var input = document.getElementById("search-input");
+        input.addEventListener("keyup", function () {
+          var filter = input.value.toLowerCase();
+          var rows = document.getElementsByTagName("tr");
+          for (var i = 0; i < rows.length; i++) {
+            var cells = rows[i].getElementsByTagName("td");
+            var visible = false;
+            for (var j = 0; j < cells.length; j++) {
+              var cellText = cells[j].textContent.toLowerCase();
+              if (cellText.indexOf(filter) > -1) {
+                visible = true;
+                break;
+              }
+            }
+            if (visible) {
+              rows[i].style.display = "";
+            } else {
+              rows[i].style.display = "none";
+            }
           }
+        });
+
+        function parseDate(input) {
+          var parts = input.match(/(\d+)/g);
+          return new Date(parts[0], parts[1] - 1, parts[2]); // Note: months are 0-based
         }
-        if (visible) {
-          rows[i].style.display = "";
-        } else {
-          rows[i].style.display = "none";
-        }
-      }
-    });
 
-    function parseDate(input) {
-  var parts = input.match(/(\d+)/g);
-  return new Date(parts[0], parts[1] - 1, parts[2]); // Note: months are 0-based
-}
+        document.getElementById("new-posts-only").addEventListener("change", function () {
+          var filterDate = new Date();
+          filterDate.setDate(filterDate.getDate() - 1); // Subtract 1 day to get the last 24 hours
+          var filterTime = filterDate.getTime();
+          var rows = document.getElementsByTagName("tr");
 
-document.getElementById("new-posts-only").addEventListener("change", function () {
-  var filterDate = new Date();
-  filterDate.setDate(filterDate.getDate() - 1); // Subtract 1 day to get the last 24 hours
-  var filterTime = filterDate.getTime();
-  var rows = document.getElementsByTagName("tr");
+          for (var i = 1; i < rows.length; i++) {
+            var dateCell = rows[i].getElementsByTagName("td")[2]; // Get the date cell, index 3
 
-  for (var i = 1; i < rows.length; i++) {
-    var dateCell = rows[i].getElementsByTagName("td")[2]; // Get the date cell, index 3
+            var postDate = parseDate(dateCell.textContent.trim());
+            var postTime = postDate.getTime();
 
-    var postDate = parseDate(dateCell.textContent.trim());
-    var postTime = postDate.getTime();
-
-    if (this.checked) {
-      if (postTime > filterTime) {
-        rows[i].style.display = "";
-      } else {
-        rows[i].style.display = "none";
-      }
-    } else {
-      rows[i].style.display = "";
-    }
-  }
-});
+            if (this.checked) {
+              if (postTime > filterTime) {
+                rows[i].style.display = "";
+              } else {
+                rows[i].style.display = "none";
+              }
+            } else {
+              rows[i].style.display = "";
+            }
+          }
+        });
 
 
-  </script>
-  
-</body>
+      </script>
+
+  </body>
 
 </html>

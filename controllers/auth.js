@@ -52,6 +52,7 @@ exports.register = async (req, res) => {
       // const token = jwt.generateAccessToken({ username });
       // res.cookie("token", token, { maxAge: 3600000, httpOnly: true });
       res.cookie('username', username, { maxAge: 3600000, httpOnly: true })
+      res.cookie('popup', {text: "You Need to verify your email", isError: false}, { maxAge: 3600000, httpOnly: true })
       mailer.verifyEmail(email, username)
       return res.redirect("/login");
     }
@@ -83,6 +84,8 @@ exports.login = async (req, res) => {
 
   //if inputs valid check if user already exist
   try {
+
+    res.cookie('username', username, { maxAge: 3600000, httpOnly: true })
     if (!(await usersDB.isUserExist(username))) {
       return res.render("pages/login", {
         user: req.user,
@@ -95,7 +98,7 @@ exports.login = async (req, res) => {
     const user = await usersDB.getUser(username);
     const isCorrectPassword = await hash.check(password, user.password);
     const isVerified = await usersDB.isVerifiedByUsername(username)
-    console.log(isVerified)
+   
     if (!isVerified) {
       return res.render("pages/login", {
         user: req.user,
@@ -117,6 +120,7 @@ exports.login = async (req, res) => {
       username: username,
       isAdmin: user.isAdmin,
     });
+
     res.cookie("token", token, { maxAge: 3600000, httpOnly: true });
     return res.redirect("/");
   } catch (err) {
@@ -133,3 +137,84 @@ exports.logout = (req, res) => {
   res.clearCookie("token");
   res.redirect("back");
 };
+
+exports.forgotPasswordPost = async (req, res) => {
+  const { email } = req.body;
+  const inputData = validator.genInputDataJSON("", "", email);
+  if (!validator.isValidEmail(email)) {
+    return res.render("pages/forgot_password", {
+      user: req.user,
+      popup: {text: "Invalid email", isError: true},
+      input: inputData,
+    });
+  }
+  try {
+    if (!(await usersDB.isEmailExist(email))) {
+      return res.render("pages/forgot_password", {
+        user: req.user,
+        popup: {text: "Email not found", isError: true},
+        input: inputData,
+      });
+    }
+    const username = await usersDB.getUsernameByEmail(email);
+    const token = jwt.generateAccessToken({ username: username });
+
+    mailer.resetPassword(email, token);
+    res.cookie('popup', {text: "Email sent", isError: false}, { maxAge: 3600000, httpOnly: true })
+    return res.redirect("/login");
+  } catch (err) {
+    return res.render("pages/forgot_password", {
+      user: req.user,
+      popup: {text: "Unknown Error", isError: true},
+      input: inputData,
+    });
+  }
+}
+
+exports.resetPasswordGet = async (req, res) => {
+  const { token } = req.query;
+  const { username } = jwt.checkToken(token);
+  if (!username) {
+    res.cookie('popup', {text: "Invalid token", isError: true}, { maxAge: 3600000, httpOnly: true })
+    return res.redirect("/login");
+  }
+
+  res.render("pages/reset_password", {
+    user: req.user,
+    token: token,
+  });
+}
+
+exports.resetPasswordPost = async (req, res) => {
+  const { password, confirmationPassword, token } = req.body;
+  const { username } = jwt.checkToken(token);
+
+  if (!validator.isValidInput(password) || !validator.isValidInput(confirmationPassword)) {
+    return res.render("pages/reset_password", {
+      user: req.user,
+      popup: validator.genMessageDataJSON("Invalid input"),
+      token: token,
+    });
+  }
+
+  if (password !== confirmationPassword) {
+    return res.render("pages/reset_password", {
+      user: req.user,
+      popup: validator.genMessageDataJSON("Passwords do not match"),
+      token: token,
+    });
+  }
+
+  try {
+    const hashedPass = await hash.hash(password);
+    await usersDB.updatePassword(username, hashedPass);
+    res.cookie('popup', {text: "Password changed", isError: false}, { maxAge: 3600000, httpOnly: true })
+    return res.redirect("/login");
+  } catch (err) {
+    return res.render("pages/reset_password", {
+      user: req.user,
+      popup: validator.genMessageDataJSON("Unknown Error"),
+      token: token,
+    });
+  }
+}
