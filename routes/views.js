@@ -30,7 +30,7 @@ router.get("/registration", (req, res) => {
 });
 
 router.get("/login", (req, res) => {
-  const input = validator.genInputDataJSON();
+  const input = validator.genInputDataJSON(username=req.cookies.username);
 
   res.render("pages/login", {
     user: req.user,

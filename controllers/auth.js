@@ -48,11 +48,12 @@ exports.register = async (req, res) => {
       const hashedPass = await hash.hash(password);
       await usersDB.newUser(username, hashedPass, name, email);
 
-      // Generate JWT Token
-      const token = jwt.generateAccessToken({ username });
-      res.cookie("token", token, { maxAge: 3600000, httpOnly: true });
+      // // Generate JWT Token
+      // const token = jwt.generateAccessToken({ username });
+      // res.cookie("token", token, { maxAge: 3600000, httpOnly: true });
+      res.cookie('username', username, { maxAge: 3600000, httpOnly: true })
       mailer.verifyEmail(email, username)
-      return res.redirect("/");
+      return res.redirect("/login");
     }
   } catch (err) {
     // If error with db
@@ -66,6 +67,9 @@ exports.register = async (req, res) => {
 
 exports.login = async (req, res) => {
   const { username, password } = req.body;
+  if (typeof(username) === 'undefined') {
+    username = req.cookies.username
+  }
   const inputData = validator.genInputDataJSON(username);
 
   //Check for valid input
@@ -90,7 +94,8 @@ exports.login = async (req, res) => {
     //if user exist try to login
     const user = await usersDB.getUser(username);
     const isCorrectPassword = await hash.check(password, user.password);
-    const isVerified = usersDB.isVerifiedByUsername(username)
+    const isVerified = await usersDB.isVerifiedByUsername(username)
+    console.log(isVerified)
     if (!isVerified) {
       return res.render("pages/login", {
         user: req.user,
